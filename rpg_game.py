@@ -80,3 +80,60 @@ def storyline(filepath):
                     raise ValueError("Invalid choice. Enter a letter corresponding to your choice.")
             else:
                 input("Press 'space' to continue...")
+                
+
+# Heyson's Section: Player section
+def update_player_turn(player, boss, action):
+    """
+    Simple Player Turn Algorithm
+    Inputs:
+        player: {
+            "hp": int,
+            "attack": int,
+            "defense": int,
+            "charge": int,
+            "max_charge": int,
+            "skill_type": str, "heal", "smite", or "shield"
+        }
+        boss: {
+            "hp": int,
+            "defense": int,
+        }
+        action: "attack", "defend", "charge", or "skill"
+    Output:
+        (player, boss): updated stats after the player's action
+    """
+    # Attack
+    if action == "attack":
+        damage = max(0, player["attack"] - boss["defense"])
+        boss["hp"] -= damage
+        # Small charge bonus
+        player["charge"] = min(player["charge"] + 1, player["max_charge"])
+    # Defend
+    elif action == "defend":
+        # Temporary extra defense for next enemy hit
+        player["defense"] += 3
+    # Charge
+    elif action == "charge":
+        # Build up charge faster
+        player["charge"] = min(player["charge"] + 2, player["max_charge"])
+    # Skill
+    elif action == "skill":
+        if player["charge"] == player["max_charge"]:
+            if player["skill_type"] == "heal":
+                player["hp"] += 20
+            elif player["skill_type"] == "smite":
+                damage = (player["attack"] + 10) - boss["defense"]
+                boss["hp"] -= max(0, damage)
+            elif player["skill_type"] == "shield":
+                player["defense"] += 6
+            # Using a skill spends all charge
+            player["charge"] = 0
+        else:
+            # If skill not ready it gives small charge instead
+            player["charge"] = min(player["charge"] + 1, player["max_charge"])
+    # Make sure HP doesn't go below 0 
+    boss["hp"] = max(0, boss["hp"])
+    player["hp"] = max(0, player["hp"])
+
+    return player, boss
