@@ -137,3 +137,63 @@ def update_player_turn(player, boss, action):
     player["hp"] = max(0, player["hp"])
 
     return player, boss
+
+# Breanna Doyle, movement/round
+
+player_history = []
+
+def round(player, boss): 
+    """
+    Simulates a round/fight between a player and boss. Characters take turns 
+    until one character has been defeated (their health reaches 0). 
+
+    Args:
+        player (dict): Dictionary with information about the player character, 
+            such as hp and other stats. 
+        boss (dict): Dictionary with information about the boss character, such
+            as hp and other stats. 
+    """
+    while player["hp"] > 0 and boss["hp"] > 0: 
+        #tell player health status of both
+        print(f"You have {player["hp"]} hp. Your opponent has {boss["hp"]} hp.")
+        #give options
+        print("You can choose from one of the following options:\n\n"
+                "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill")
+        #ask player what to do 
+        action_choice = input(f"{player["name"]}, which action would you like to take?")
+        #validate action
+        while True:  
+            if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
+                print("This is not a valid action. Please type one of the"
+                "specified letters.")
+                print("You can choose from one of the following options:\n\n"
+                "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill")
+                action_choice = input(f"{player["name"]}, which action would you like" 
+                        "to take?")
+            else: 
+                action_dict = {"A": "attack", "a": "attack", "D": "defend", "d":
+                    "defend", "C": "charge", "c": "charge", "S": "skill",
+                    "s": "skill"
+                }
+                action = action_dict[action_choice]
+                break
+        #update player history
+        player_history.append["action"]
+        
+        #choose boss action: 
+        if boss["type"] == "aggressive" or "passive" or "defensive": 
+            boss_behavior(boss["hp"], boss["type"])
+        else: 
+            special_boss_behavior(boss["hp"], aggbehavior, defbehavior, 
+                                  passbehavior, player_history[-1]
+                )
+
+        #turn! update hp/charge status
+        update_player_turn(player, boss, action)
+        #will continue until one or both character's hp dip below zero
+        
+    if player["hp"] <= 0: 
+        print("Unfortunately, you have have been defeated.")
+    elif boss["hp"] <= 0: 
+        print("Hooray! You have successfully defeated the boss and will move on"
+              "to the next round.")
