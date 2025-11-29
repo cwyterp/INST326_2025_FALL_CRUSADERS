@@ -17,6 +17,10 @@ class Story():
                 else:
                     input("Press 'space' to continue...")
 
+class Game():
+    def __init__():
+        pass
+    
 
 # Breanna Doyle, movement/round
 class Moveset():
@@ -170,9 +174,9 @@ class Boss():
                     3: move.charge(), 4: move.skill()}
         if skill:
             return choicedict[4]
-        if health > aggbehavior["health"]/2:
+        if health > behaviordict["health"]/2:
             return choicedict[random.choice(behaviordict["phase1"])]
-        elif health > aggbehavior["health"]/4:
+        elif health > behaviordict["health"]/4:
             return choicedict[random.choice(behaviordict["phase2"])]
         else:
             return choicedict[random.choice(behaviordict["phase3"])]
