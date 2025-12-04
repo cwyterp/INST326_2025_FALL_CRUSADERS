@@ -187,7 +187,6 @@ class Player:
 
 
 class Boss:
-    move = Moveset()
     # Chris Section Boss Behavior
     aggbehavior = {
         "health": 30,
@@ -267,11 +266,9 @@ class Boss:
         }
         if skill == True:
             return choicedict[4]
-        if playerhistory[:-2] == [move.attack(), move.attack()]:
+        if playerhistory[-2:] == [move.attack(), move.attack()]:
             return boss_behavior(health, defbehavior)
-        elif playerhistory[:-2] == [move.defend(), move.attack()] or playerhistory[
-            :-2
-        ] == [move.attack(), move.defend()]:
+        elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[-2:] == [move.attack(), move.defend()]:
             return boss_behavior(health, aggbehavior)
         else:
             return boss_behavior(health, passbehavior)
