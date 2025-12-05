@@ -150,60 +150,58 @@ class Moveset:
 
 class Player:
     # Heyson's Section: Player section
-    def update_player_turn(player, boss, action):
-        """
-        Simple Player Turn Algorithm
-        Inputs:
-            player: {
-                "hp": int,
-                "attack": int,
-                "defense": int,
-                "charge": int,
-                "max_charge": int,
-                "skill_type": str, "heal", "smite", or "shield"
-            }
-            boss: {
-                "hp": int,
-                "defense": int,
-            }
-            action: "attack", "defend", "charge", or "skill"
-        Output:
-            (player, boss): updated stats after the player's action
-        """
-        # Attack
-        if action == "attack":
-            damage = max(0, player["attack"] - boss["defense"])
-            boss["hp"] -= damage
-            # Small charge bonus
-            player["charge"] = min(player["charge"] + 1, player["max_charge"])
-        # Defend
-        elif action == "defend":
-            # Temporary extra defense for next enemy hit
-            player["defense"] += 3
-        # Charge
-        elif action == "charge":
-            # Build up charge faster
-            player["charge"] = min(player["charge"] + 2, player["max_charge"])
-        # Skill
-        elif action == "skill":
-            if player["charge"] == player["max_charge"]:
-                if player["skill_type"] == "heal":
-                    player["hp"] += 20
-                elif player["skill_type"] == "smite":
-                    damage = (player["attack"] + 10) - boss["defense"]
-                    boss["hp"] -= max(0, damage)
-                elif player["skill_type"] == "shield":
-                    player["defense"] += 6
-                # Using a skill spends all charge
-                player["charge"] = 0
-            else:
-                # If skill not ready it gives small charge instead
-                player["charge"] = min(player["charge"] + 1, player["max_charge"])
-        # Make sure HP doesn't go below 0
-        boss["hp"] = max(0, boss["hp"])
-        player["hp"] = max(0, player["hp"])
+    def __init__(self, name, hp, attack, defense, max_charge, skill_type):
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+        self.charge = 0
+        self.max_charge = max_charge
+        self.skill_type = skill_type  # heal, smite, or shield
 
-        return player, boss
+    def take_action(self, state, action):
+        boss = state.boss
+        
+        if action == "attack":
+            damage = max(0, self.attack - boss.defense)
+            boss.hp -= damage
+            self.charge = min(self.charge + 1, self.max_charge)
+            print(f"{self.name} attacked dealing {damage} damage.")
+
+        elif action == "defend":
+            self.defense += 3
+            print(f"{self.name} raised their guard! Defense is now {self.defense}.")
+
+        elif action == "charge":
+            self.charge = min(self.charge + 2, self.max_charge)
+            print(f"{self.name} charged their power! Charge is now:{self.max_charge}")
+
+        elif action == "skill":
+            if self.charge == self.max_charge:
+
+                if self.skill_type == "heal":
+                    self.hp += 20
+                    print(f"{self.name} uses HEAL! Restores 20 HP. "
+                          f"New HP: {self.hp}")
+
+                elif self.skill_type == "smite":
+                    dmg = max(0, (self.attack + 10) - boss.defense)
+                    boss.hp -= dmg
+                    print(f"{self.name} uses SMITE! Deals {dmg}")
+
+                elif self.skill_type == "shield":
+                    self.defense += 6
+                    print(f"{self.name} uses SHIELD! Defense increases by 6. "
+                          f"New Defense: {self.defense}.")
+
+                print(f"Skill fully used — charge resets to 0.")
+                self.charge = 0
+
+            else:
+                self.charge = min(self.charge + 1, self.max_charge)
+                print(f"Skill not ready. {self.name} gains small charge ")
+
+        return state
 
 
 class Boss:
