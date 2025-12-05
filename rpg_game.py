@@ -15,9 +15,7 @@ class Story:
                 if line[-1] == "?":
                     choice = input("Choose your destiny.")
                     if choice not in Story.alphabet:
-                        raise ValueError(
-                            "Invalid choice. Enter a letter corresponding to your choice."
-                        )
+                        raise ValueError("Invalid choice. Enter a letter a-d")
                 else:
                     input("Press 'space' to continue...")
 
@@ -58,9 +56,15 @@ class Game:
     def end_results(self):
         if self.status == False:
             if self.winner == "player":
-                return f"Yayy you defeated the boss. Good Job :). \nHere were the stats: \n{self.player_stats}\n{self.boss_stats}"
+                return (
+                    f"Yayy you defeated the boss. Good Job :). \nHere were "
+                    + f"the stats: \n{self.player_stats}\n{self.boss_stats}"
+                )
             else:
-                return f"Womp womp you lost :( \n...\n Here were the stats: \n{self.player_stats}\n{self.boss_stats}"
+                return (
+                    f"Womp womp you lost :( \n...\n Here were the stats: "
+                    + f"\n{self.player_stats}\n{self.boss_stats}"
+                )
 
     def run_game(self):
         self.commence()
