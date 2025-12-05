@@ -4,24 +4,7 @@ from argparse import ArgumentParser
 
 class Story:
     # Jahnavi's Section: Story Function
-    alphabet = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-    ]
+    alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
 
     def storyline(filepath):
         with open(filepath, "r", encoding="UTF-8") as f:
@@ -36,9 +19,6 @@ class Story:
                         )
                 else:
                     input("Press 'space' to continue...")
-
-    def update_story(Game):
-        raise NotImplementedError()
 
 
 class Game:
