@@ -208,6 +208,19 @@ class Boss:
         "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
         "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
     }
+    
+    boss_stat = {
+        "hp":30,
+        "def":2,
+        "attack":4,
+        "charge":0
+    }
+    
+    def __init__(self, boss_stat):
+        self.hp = boss_stat["hp"]
+        self.defense = boss_stat["def"]
+        self.attack = boss_stat["attack"]
+        self.charge = boss_stat["charge"]
 
     def boss_behavior(health, behaviordict, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
