@@ -152,13 +152,12 @@ class Player:
     # Heyson's Section: Player section
     def __init__(
         self,
-        name = "name", 
+        name, 
+        skill_type,
         hp = 100,
         attack = 12, 
         defense = 5, 
-        max_charge = 5 , 
-        skill_type = "skill"
-        ):
+        max_charge = 5 ,):
         
         self.name = name
         self.hp = hp
