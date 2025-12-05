@@ -68,22 +68,22 @@ class Game:
 
 # Breanna Doyle, movement/round
 class Moveset:
-    player_history = []
-
     def round(player, boss):
         """
         Simulates a round/fight between a player and boss. Characters take turns
         until one character has been defeated (their health reaches 0).
 
         Args:
-            player (dict): Dictionary with information about the player character,
-                such as hp and other stats.
-            boss (dict): Dictionary with information about the boss character, such
-                as hp and other stats.
+            player (Player): The human player
+            boss (Boss): The boss (opponent) of the round
+            
+        Side effects: 
+            Several print statements giving the player options, asking for 
+            input, and announcing if the player wins/loses. 
         """
-        while player["hp"] > 0 and boss["hp"] > 0:
+        while player.hp > 0 and boss.hp > 0:
             # tell player health status of both
-            print(f"You have {player["hp"]} hp. Your opponent has {boss["hp"]} hp.")
+            print(f"You have {player.hp} hp. Your opponent has {boss.hp} hp.")
             # give options
             print(
                 "You can choose from one of the following options:\n\n"
@@ -91,9 +91,9 @@ class Moveset:
             )
             # ask player what to do
             action_choice = input(
-                f"{player["name"]}, which action would you like to take?"
+                f"{player.name}, which action would you like to take?"
             )
-            # validate action
+            # validate 
             while True:
                 if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
                     print(
@@ -105,7 +105,7 @@ class Moveset:
                         "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
                     )
                     action_choice = input(
-                        f"{player["name"]}, which action would you like" "to take?"
+                        f"{player.name}, which action would you like" "to take?"
                     )
                 else:
                     action_dict = {
@@ -121,13 +121,13 @@ class Moveset:
                     action = action_dict[action_choice]
                     break
             # update player history
-            player_history.append["action"]
+            player.player_history.append["action"]
 
             # choose boss action:
             if boss["type"] == "aggressive" or "passive" or "defensive":
-                boss_behavior(boss["hp"], boss["type"])
+                boss.boss_behavior(boss["hp"], boss["type"])
             else:
-                special_boss_behavior(
+                boss.special_boss_behavior(
                     boss["hp"],
                     aggbehavior,
                     defbehavior,
@@ -136,7 +136,7 @@ class Moveset:
                 )
 
             # turn! update hp/charge status
-            update_player_turn(player, boss, action)
+            player.take_action(boss, action)
             # will continue until one or both character's hp dip below zero
 
         if player["hp"] <= 0:
