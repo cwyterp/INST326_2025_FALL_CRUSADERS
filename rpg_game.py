@@ -152,12 +152,12 @@ class Player:
     # Heyson's Section: Player section
     def __init__(
         self,
-        name = "Bastion", 
+        name = "name", 
         hp = 100,
         attack = 12, 
         defense = 5, 
         max_charge = 5 , 
-        skill_type = "heal"
+        skill_type = "skill"
         ):
         
         self.name = name
@@ -168,7 +168,7 @@ class Player:
         self.max_charge = max_charge
         # heal, smite, shield
         self.skill_type = skill_type
-        self.player_history = {}
+        self.player_history = []
 
     def take_action(self, state, action):
         boss = state.boss
