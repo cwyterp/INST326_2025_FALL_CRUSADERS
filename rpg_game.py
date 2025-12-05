@@ -23,12 +23,47 @@ class Story:
 
 
 class Game:
-    player = Player()
-    boss = Boss()
-    character_stats = [player.hp, boss.hp]
+    def __init__(self, player, boss):
+        self.player = Player()
+        self.boss = Boss()
 
-    def __init__(player, boss):
-        pass
+        self.status = True
+        self.winner = None
+        self.player_stats = {
+            "name": self.player.name,
+            "hp": self.player.hp,
+            "attack": self.player.attack,
+            "defense": self.player.defense,
+            "charge": self.player.charge,
+        }
+
+        self.boss_stats = {
+            "hp": self.boss.hp,
+            "attack": self.boss.attack,
+            "defense": self.boss.defense,
+            "charge": self.boss.charge,
+        }
+
+    def commence(self):
+
+        Moveset.round(self.player, self.boss)
+
+        self.player.hp = self.player_stats["hp"]
+        self.boss.hp = self.boss_stats["hp"]
+
+        self.winner = "boss" if self.player_stats["hp"] <= 0 else "player"
+        self.status = False
+
+    def end_results(self):
+        if self.status == False:
+            if self.winner == "player":
+                return f"Yayy you defeated the boss. Good Job :). \nHere were the stats: \n{self.player_stats}\n{self.boss_stats}"
+            else:
+                return f"Womp womp you lost :( \n...\n Here were the stats: \n{self.player_stats}\n{self.boss_stats}"
+
+    def run_game(self):
+        self.commence()
+        self.end_results()
 
 
 # Breanna Doyle, movement/round
@@ -193,14 +228,9 @@ class Boss:
         "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
         "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
     }
-    
-    boss_stat = {
-        "hp":150,
-        "def":5,
-        "attack":10,
-        "charge":0
-    }
-    
+
+    boss_stat = {"hp": 150, "def": 5, "attack": 10, "charge": 0}
+
     def __init__(self, boss_stat):
         self.hp = boss_stat["hp"]
         self.defense = boss_stat["def"]
@@ -266,7 +296,9 @@ class Boss:
             return choicedict[4]
         if playerhistory[-2:] == [move.attack(), move.attack()]:
             return boss_behavior(health, defbehavior)
-        elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[-2:] == [move.attack(), move.defend()]:
+        elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[
+            -2:
+        ] == [move.attack(), move.defend()]:
             return boss_behavior(health, aggbehavior)
         else:
             return boss_behavior(health, passbehavior)
@@ -281,12 +313,13 @@ def main(path):
 
     """
     story = Story()
+    game = Game().run_game()
 
 
 def parse_args(arglist):
     """Parse command-line arguments.
 
-    Expects four mandatory command-line argument: a main story file and the three branch story files. 
+    Expects four mandatory command-line argument: a main story file and the three branch story files.
 
     Args:
         arglist (list of str): a list of command-line arguments to parse.
