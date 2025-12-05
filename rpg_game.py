@@ -159,6 +159,7 @@ class Player:
         max_charge = 5 , 
         skill_type = "heal"
         ):
+        
         self.name = name
         self.hp = hp
         self.attack = attack
