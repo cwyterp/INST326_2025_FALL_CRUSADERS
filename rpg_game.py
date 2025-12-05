@@ -22,7 +22,11 @@ class Story:
 
 
 class Game:
-    def __init__():
+    player = Player()
+    boss = Boss()
+    character_stats = [player.hp, boss.hp]
+
+    def __init__(player, boss):
         pass
 
 
