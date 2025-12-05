@@ -14,7 +14,7 @@ class Story:
                 print(line)
                 if line[-1] == "?":
                     choice = input("Choose your destiny.")
-                    if choice not in alphabet:
+                    if choice not in Story.alphabet:
                         raise ValueError(
                             "Invalid choice. Enter a letter corresponding to your choice."
                         )
@@ -279,7 +279,7 @@ class Boss:
             return choicedict[random.choice(behaviordict["phase3"])]
 
     def special_boss_behavior(
-        health, aggbehavior, defbehavior, passbehavior, playerchoice, skill=False
+        self, health, aggbehavior, defbehavior, passbehavior, playerchoice, skill=False
     ):
         """Works as a special adaptable boss based on player choices
 
@@ -308,13 +308,13 @@ class Boss:
         if skill == True:
             return choicedict[4]
         if playerhistory[-2:] == [move.attack(), move.attack()]:
-            return boss_behavior(health, defbehavior)
+            return self.boss_behavior(health, defbehavior)
         elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[
             -2:
         ] == [move.attack(), move.defend()]:
-            return boss_behavior(health, aggbehavior)
+            return self.boss_behavior(health, aggbehavior)
         else:
-            return boss_behavior(health, passbehavior)
+            return self.boss_behavior(health, passbehavior)
 
 
 def main(path):
