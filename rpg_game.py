@@ -23,6 +23,7 @@ class Story:
 
 
 class Game:
+    # Jahnavi's Section 2
     def __init__(self):
         self.player = Player()
         self.boss = Boss()
