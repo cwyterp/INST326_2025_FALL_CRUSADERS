@@ -7,7 +7,7 @@ class Story:
     # Jahnavi's Section: Story Function
     alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
 
-    def storyline(filepath):
+    def storyline(filepath="storyline.md"):
         with open(filepath, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
@@ -157,11 +157,11 @@ class Player:
         self.defense = stat["defense"]
         self.charge = stat.get("charge", 0)
         self.max_charge = stat["max_charge"]
-        self.skill_type = stat["skill_type"]   # heal, smite, shield
+        self.skill_type = stat["skill_type"]  # heal, smite, shield
 
     def take_action(self, state, action):
         boss = state.boss
-        
+
         if action == "attack":
             damage = max(0, self.attack - boss.defense)
             boss.hp -= damage
@@ -181,8 +181,9 @@ class Player:
 
                 if self.skill_type == "heal":
                     self.hp += 20
-                    print(f"{self.name} uses HEAL! Restores 20 HP. "
-                          f"New HP: {self.hp}")
+                    print(
+                        f"{self.name} uses HEAL! Restores 20 HP. " f"New HP: {self.hp}"
+                    )
 
                 elif self.skill_type == "smite":
                     dmg = max(0, (self.attack + 10) - boss.defense)
@@ -191,8 +192,10 @@ class Player:
 
                 elif self.skill_type == "shield":
                     self.defense += 6
-                    print(f"{self.name} uses SHIELD! Defense increases by 6. "
-                          f"New Defense: {self.defense}.")
+                    print(
+                        f"{self.name} uses SHIELD! Defense increases by 6. "
+                        f"New Defense: {self.defense}."
+                    )
 
                 print(f"Skill fully used — charge resets to 0.")
                 self.charge = 0
