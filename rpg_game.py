@@ -14,15 +14,14 @@ class Story:
                 print(line)
                 if line[-1] == "?":
                     choice = input("Choose your destiny.")
-                    if choice not in alphabet:
-                        raise ValueError(
-                            "Invalid choice. Enter a letter corresponding to your choice."
-                        )
+                    if choice not in Story.alphabet:
+                        raise ValueError("Invalid choice. Enter a letter a-d")
                 else:
                     input("Press 'space' to continue...")
 
 
 class Game:
+    # Jahnavi's Section 2
     def __init__(self):
         self.player = Player()
         self.boss = Boss()
@@ -57,9 +56,15 @@ class Game:
     def end_results(self):
         if self.status == False:
             if self.winner == "player":
-                return f"Yayy you defeated the boss. Good Job :). \nHere were the stats: \n{self.player_stats}\n{self.boss_stats}"
+                return (
+                    f"Yayy you defeated the boss. Good Job :). \nHere were "
+                    + f"the stats: \n{self.player_stats}\n{self.boss_stats}"
+                )
             else:
-                return f"Womp womp you lost :( \n...\n Here were the stats: \n{self.player_stats}\n{self.boss_stats}"
+                return (
+                    f"Womp womp you lost :( \n...\n Here were the stats: "
+                    + f"\n{self.player_stats}\n{self.boss_stats}"
+                )
 
     def run_game(self):
         self.commence()
@@ -76,10 +81,10 @@ class Moveset:
         Args:
             player (Player): The human player
             boss (Boss): The boss (opponent) of the round
-            
-        Side effects: 
-            Several print statements giving the player options, asking for 
-            input, and announcing if the player wins/loses. 
+
+        Side effects:
+            Several print statements giving the player options, asking for
+            input, and announcing if the player wins/loses.
         """
         while player.hp > 0 and boss.hp > 0:
             # tell player health status of both
@@ -93,7 +98,7 @@ class Moveset:
             action_choice = input(
                 f"{player.name}, which action would you like to take?"
             )
-            # validate 
+            # validate
             while True:
                 if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
                     print(
@@ -129,10 +134,10 @@ class Moveset:
             else:
                 boss.special_boss_behavior(
                     boss["hp"],
-                    aggbehavior,
-                    defbehavior,
-                    passbehavior,
-                    player_history[-1],
+                    boss.aggbehavior,
+                    boss.defbehavior,
+                    boss.passbehavior,
+                    boss.player_history[-1],
                 )
 
             # turn! update hp/charge status
@@ -277,7 +282,7 @@ class Boss:
             return choicedict[random.choice(behaviordict["phase3"])]
 
     def special_boss_behavior(
-        health, aggbehavior, defbehavior, passbehavior, playerchoice, skill=False
+        self, health, aggbehavior, defbehavior, passbehavior, playerchoice, skill=False
     ):
         """Works as a special adaptable boss based on player choices
 
@@ -306,13 +311,13 @@ class Boss:
         if skill == True:
             return choicedict[4]
         if playerhistory[-2:] == [move.attack(), move.attack()]:
-            return boss_behavior(health, defbehavior)
+            return self.boss_behavior(health, defbehavior)
         elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[
             -2:
         ] == [move.attack(), move.defend()]:
-            return boss_behavior(health, aggbehavior)
+            return self.boss_behavior(health, aggbehavior)
         else:
-            return boss_behavior(health, passbehavior)
+            return self.boss_behavior(health, passbehavior)
 
 
 def main(path):
