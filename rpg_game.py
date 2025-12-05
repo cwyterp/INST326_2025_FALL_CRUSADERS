@@ -150,14 +150,25 @@ class Moveset:
 
 class Player:
     # Heyson's Section: Player section
-    def __init__(self, stat):
-        self.name = stat["name"]
-        self.hp = stat["hp"]
-        self.attack = stat["attack"]
-        self.defense = stat["defense"]
-        self.charge = stat.get("charge", 0)
-        self.max_charge = stat["max_charge"]
-        self.skill_type = stat["skill_type"]  # heal, smite, shield
+    def __init__(
+        self,
+        name = "Bastion", 
+        hp = 100,
+        attack = 12, 
+        defense = 5, 
+        max_charge = 5 , 
+        skill_type = "heal"
+        ):
+        
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+        self.charge = 0
+        self.max_charge = max_charge
+        # heal, smite, shield
+        self.skill_type = skill_type
+        self.player_history = {}
 
     def take_action(self, state, action):
         boss = state.boss
