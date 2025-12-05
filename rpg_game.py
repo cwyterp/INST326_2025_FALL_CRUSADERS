@@ -210,9 +210,9 @@ class Boss:
     }
     
     boss_stat = {
-        "hp":30,
-        "def":2,
-        "attack":4,
+        "hp":150,
+        "def":5,
+        "attack":10,
         "charge":0
     }
     
