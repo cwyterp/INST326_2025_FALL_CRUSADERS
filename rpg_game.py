@@ -77,10 +77,10 @@ class Moveset:
         Args:
             player (Player): The human player
             boss (Boss): The boss (opponent) of the round
-            
-        Side effects: 
-            Several print statements giving the player options, asking for 
-            input, and announcing if the player wins/loses. 
+
+        Side effects:
+            Several print statements giving the player options, asking for
+            input, and announcing if the player wins/loses.
         """
         while player.hp > 0 and boss.hp > 0:
             # tell player health status of both
@@ -94,7 +94,7 @@ class Moveset:
             action_choice = input(
                 f"{player.name}, which action would you like to take?"
             )
-            # validate 
+            # validate
             while True:
                 if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
                     print(
@@ -130,10 +130,10 @@ class Moveset:
             else:
                 boss.special_boss_behavior(
                     boss["hp"],
-                    aggbehavior,
-                    defbehavior,
-                    passbehavior,
-                    player_history[-1],
+                    boss.aggbehavior,
+                    boss.defbehavior,
+                    boss.passbehavior,
+                    boss.player_history[-1],
                 )
 
             # turn! update hp/charge status
@@ -153,14 +153,14 @@ class Player:
     # Heyson's Section: Player section
     def __init__(
         self,
-        name = "name", 
-        hp = 100,
-        attack = 12, 
-        defense = 5, 
-        max_charge = 5 , 
-        skill_type = "skill"
-        ):
-        
+        name="name",
+        hp=100,
+        attack=12,
+        defense=5,
+        max_charge=5,
+        skill_type="skill",
+    ):
+
         self.name = name
         self.hp = hp
         self.attack = attack
