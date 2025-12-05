@@ -1,5 +1,6 @@
 import random
 from argparse import ArgumentParser
+import sys
 
 
 class Story:
@@ -171,7 +172,6 @@ class Player:
 
 
 class Boss:
-    move = Moveset()
     # Chris Section Boss Behavior
     aggbehavior = {
         "health": 30,
@@ -193,6 +193,19 @@ class Boss:
         "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
         "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
     }
+    
+    boss_stat = {
+        "hp":150,
+        "def":5,
+        "attack":10,
+        "charge":0
+    }
+    
+    def __init__(self, boss_stat):
+        self.hp = boss_stat["hp"]
+        self.defense = boss_stat["def"]
+        self.attack = boss_stat["attack"]
+        self.charge = boss_stat["charge"]
 
     def boss_behavior(health, behaviordict, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
@@ -251,11 +264,9 @@ class Boss:
         }
         if skill == True:
             return choicedict[4]
-        if playerhistory[:-2] == [move.attack(), move.attack()]:
+        if playerhistory[-2:] == [move.attack(), move.attack()]:
             return boss_behavior(health, defbehavior)
-        elif playerhistory[:-2] == [move.defend(), move.attack()] or playerhistory[
-            :-2
-        ] == [move.attack(), move.defend()]:
+        elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[-2:] == [move.attack(), move.defend()]:
             return boss_behavior(health, aggbehavior)
         else:
             return boss_behavior(health, passbehavior)
@@ -275,8 +286,7 @@ def main(path):
 def parse_args(arglist):
     """Parse command-line arguments.
 
-    Expects one mandatory command-line argument: a path to a text file where
-    each line consists of a name, a tab character, and a phone number.
+    Expects four mandatory command-line argument: a main story file and the three branch story files. 
 
     Args:
         arglist (list of str): a list of command-line arguments to parse.
@@ -286,7 +296,10 @@ def parse_args(arglist):
         is a path to a text file as described above.
     """
     parser = ArgumentParser()
-    parser.add_argument("file", help="file of names and numbers")
+    parser.add_argument("mainstory", help="file of storylines")
+    parser.add_argument("story1", help="story1file")
+    parser.add_argument("story2", help="story2file")
+    parser.add_argument("story3", help="story3file")
     return parser.parse_args(arglist)
 
 
