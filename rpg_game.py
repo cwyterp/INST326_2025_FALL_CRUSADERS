@@ -288,8 +288,7 @@ def main(path):
 def parse_args(arglist):
     """Parse command-line arguments.
 
-    Expects one mandatory command-line argument: a path to a text file where
-    each line consists of a name, a tab character, and a phone number.
+    Expects four mandatory command-line argument: a main story file and the three branch story files. 
 
     Args:
         arglist (list of str): a list of command-line arguments to parse.
@@ -299,7 +298,10 @@ def parse_args(arglist):
         is a path to a text file as described above.
     """
     parser = ArgumentParser()
-    parser.add_argument("file", help="file of names and numbers")
+    parser.add_argument("mainstory", help="file of storylines")
+    parser.add_argument("story1", help="story1file")
+    parser.add_argument("story2", help="story2file")
+    parser.add_argument("story3", help="story3file")
     return parser.parse_args(arglist)
 
 
