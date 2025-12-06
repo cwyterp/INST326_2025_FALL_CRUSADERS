@@ -6,6 +6,7 @@ The many cats of the land lived in harmony with one another.
 That is until a monstrous ring of rats appeared. 
 They terrorized the lands and congregated power into four big rats.
 One rat king above them all, while supported by its three vassals.
+Someone must journey to eliminate all of the King's Vassals and finally, the King itself.
 It is time for you to take a stand.
 You wake up in the small town of Yarny. 
 Set upon the path you are equipped with a few items.
@@ -14,8 +15,15 @@ A shield to defend with.
 A will to gather strength.
 And the power to unleash that gathered strength.
 Setting off on your journey you come across three paths.
-The first houses a dense forest.
+The first wide expanse of fields.
 The second is a docking shore.
-The third is a wide expanse of fields.
+The third is a dense forest.
 Where will you go?
+
+After a long journey you are now faced with the Rat King's Castle. 
+You ready yourself for the final battle.
+Opening the gats you wander into the expansive hall. 
+At the throne sits the Rat King. 
+We wish for your victory.
+
 
