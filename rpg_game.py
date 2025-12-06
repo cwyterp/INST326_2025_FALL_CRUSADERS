@@ -225,33 +225,29 @@ class Player:
 class Boss:
     # Chris Section Boss Behavior
     aggbehavior = {
-        "health": 30,
         "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
         "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
         "phase3": [1, 1, 1, 1, 1, 3, 3, 3],
     }
 
     defbehavior = {
-        "health": 30,
         "phase1": [1, 1, 1, 1, 2, 2, 2, 3],
         "phase2": [1, 1, 2, 2, 2, 2, 3, 3],
         "phase3": [1, 2, 2, 2, 2, 3, 3, 3],
     }
 
     passbehavior = {
-        "health": 30,
         "phase1": [1, 1, 1, 2, 2, 3, 3, 3],
         "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
         "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
     }
 
-    boss_stat = {"hp": 150, "def": 5, "attack": 10, "charge": 0}
-
-    def __init__(self, boss_stat):
-        self.hp = boss_stat["hp"]
-        self.defense = boss_stat["def"]
-        self.attack = boss_stat["attack"]
-        self.charge = boss_stat["charge"]
+    def __init__(self):
+        self.hp = 150
+        self.defense = 6
+        self.attack = 10
+        self.charge = 1
+        self.max_charge = 5
 
     def boss_behavior(health, behaviordict, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
