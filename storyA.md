@@ -8,7 +8,8 @@ One of the King's Vassals.
 Peter the Peaceful.
 We wish for your victory.
 
-You have chosen to walk down the docked path.
+Congratulations you have defeated one of the King's Vassals.
+You walk down the second path towards the docks.
 Boarding a boat you begin to sail.
 The waters rock high and low as the winds bob you up and down.
 As you sail the winds begin to pick up.
@@ -19,7 +20,7 @@ One of the King's Vassals.
 Doug the Defense.
 We wish for your victory.
 
-You have chosen to walk down the forested path.
+Congratulations you have defeated two of the King's Vassals.
 You walk into the forest as the light dims.
 The sound of leaves rustling grows stronger.
 You tense as you enter a small clearing.
