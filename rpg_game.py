@@ -369,9 +369,9 @@ def parse_args(arglist):
     """
     parser = ArgumentParser()
     parser.add_argument("mainstory", help="file of storylines")
-    parser.add_argument("story1", help="story1file")
-    parser.add_argument("story2", help="story2file")
-    parser.add_argument("story3", help="story3file")
+    ##parser.add_argument("story1", help="story1file")
+    ##parser.add_argument("story2", help="story2file")
+    ##parser.add_argument("story3", help="story3file")
     return parser.parse_args(arglist)
 
 
