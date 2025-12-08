@@ -268,7 +268,7 @@ class Boss:
             "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
         }
 
-    def boss_behavior(health, behaviordict, skill=False):
+    def boss_behavior(self, health, behaviordict, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
         if it's charged and set 3 phases of 50% health, 25% health, then below 25%
 
@@ -286,7 +286,9 @@ class Boss:
             3: "charge",
             4: "skill",
         }
-
+        
+        if self.charge == 5:
+            skill == True
         if skill:
             return choicedict[4]
         if health > 150 / 2:
@@ -323,7 +325,9 @@ class Boss:
             3: "charge",
             4: "skill",
         }
-        if self.max_charge == True:
+        if self.charge == 5:
+            skill == True
+        if skill == True:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
             return self.boss_behavior(health, defbehavior)
