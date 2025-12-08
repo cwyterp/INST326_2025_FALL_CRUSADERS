@@ -5,10 +5,9 @@ import sys
 
 class Story:
     # Jahnavi's Section: Story Function
-    alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
-
-    def storyline(filepath="storyline.md"):
-        with open(filepath, "r", encoding="UTF-8") as f:
+    def storyline(main_story, path_A, path_B, path_C):
+        alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
+        with open(main_story, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
                 print(line)
