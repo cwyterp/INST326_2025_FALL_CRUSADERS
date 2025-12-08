@@ -23,7 +23,9 @@ class Story:
 class Game:
     # Jahnavi's Section 2
     def __init__(self):
-        self.player = Player(input("Choose name: "),input("Choose your skill(Smite,Heal,Sheild): ") )
+        self.player = Player(
+            input("Choose name: "), input("Choose your skill(Smite,Heal,Sheild): ")
+        )
         self.boss = Boss()
 
         self.status = True
@@ -155,8 +157,8 @@ class Moveset:
 
 class Player:
     # Heyson's Section: Player section
-    def __init__(self,name,skill_type):
-        
+    def __init__(self, name, skill_type):
+
         self.name = name
         self.hp = 100
         self.attack = 12
@@ -324,16 +326,17 @@ def main(path):
     name = input("Hello Traveler! Please input your name here: ")
     print()
     print("To help you on your travels, you may choose one skill.")
-    print("These skills are:\nsmite, for extra attack damage\nshield, for a"
-          " stronger defense\nheal, to boost your health")
+    print(
+        "These skills are:\nsmite, for extra attack damage\nshield, for a"
+        " stronger defense\nheal, to boost your health"
+    )
     skill = input("Please type the name of the skill you'd like here: ")
-    
-    #validate skill type
+
+    # validate skill type
     while True:
         if skill not in ["smite", "shield", "heal"]:
             print(
-                "This is not a valid action. Please type one of the "
-                "listed skills."
+                "This is not a valid action. Please type one of the " "listed skills."
             )
             print(
                 "You can choose from one of the following options:\n"
@@ -342,7 +345,6 @@ def main(path):
             skill = input("Please type the name of the skill you'd like here: ")
         else:
             break
-
 
 
 def parse_args(arglist):
