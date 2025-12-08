@@ -116,23 +116,24 @@ def round(player, boss_type):
         # give options
         print(
             "You can choose from one of the following options:\n\n"
-            "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
+            "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill\n"
         )
         # ask player what to do
-        action_choice = input(f"{player.name}, which action would you like to take?")
+        action_choice = input(f"{player.name}, which action would you like to "
+                              "take?\n")
         # validate
         while True:
             if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
                 print(
-                    "This is not a valid action. Please type one of the"
+                    "This is not a valid action. Please type one of the "
                     "specified letters."
                 )
                 print(
                     "You can choose from one of the following options:\n\n"
-                    "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
+                    "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill\n"
                 )
                 action_choice = input(
-                    f"{player.name}, which action would you like" "to take?"
+                    f"{player.name}, which action would you like to take?\n"
                 )
             else:
                 action_dict = {
@@ -148,14 +149,13 @@ def round(player, boss_type):
                 action = action_dict[action_choice]
                 break
         # update player history
-        player.player_history.append[action]
+        player.player_history.append(action)
 
         # choose boss action:
-        if boss["type"] == "aggressive" or "passive" or "defensive":
-            boss.boss_behavior(boss["hp"], boss["type"])
+        if boss.type == "aggressive" or "passive" or "defensive":
+            boss.boss_behavior()
         else:
             boss.special_boss_behavior(
-                boss["hp"],
                 boss.aggbehavior,
                 boss.defbehavior,
                 boss.passbehavior,
@@ -166,9 +166,9 @@ def round(player, boss_type):
         player.take_action(boss, action)
         # will continue until one or both character's hp dip below zero
 
-    if player["hp"] <= 0:
+    if player.hp <= 0:
         print("Unfortunately, you have have been defeated.")
-    elif boss["hp"] <= 0:
+    elif boss.hp <= 0:
         print(
             "Hooray! You have successfully defeated the boss and will move on"
             " to the next round."
@@ -199,8 +199,7 @@ class Player:
         self.skill_type = skill_type
         self.player_history = []
 
-    def take_action(self, state, action):
-        boss = state.boss
+    def take_action(self, boss, action):
 
         if action == "attack":
             damage = max(0, self.attack - boss.defense)
@@ -244,7 +243,7 @@ class Player:
                 self.charge = min(self.charge + 1, self.max_charge)
                 print(f"Skill not ready. {self.name} gains small charge ")
 
-        return state
+        return 
 
 
 class Boss:
@@ -273,7 +272,7 @@ class Boss:
             "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
         }
 
-    def boss_behavior(self, health, behaviordict, skill=False):
+    def boss_behavior(self, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
         if it's charged and set 3 phases of 50% health, 25% health, then below 25%
 
@@ -285,6 +284,13 @@ class Boss:
         Returns:
             Move choice based on the health and ratio or charged skill
         """
+        if self.type == "passive": 
+            behaviordict = self.passbehavior
+        elif self.type == "aggressive":
+            behaviordict = self.aggbehavior
+        else: 
+            behaviordict = self.defbehavior
+            
         choicedict = {
             1: "attack",
             2: "defend",
@@ -296,16 +302,15 @@ class Boss:
             skill == True
         if skill:
             return choicedict[4]
-        if health > 150 / 2:
+        if self.hp > 150 / 2:
             return choicedict[random.choice(behaviordict["phase1"])]
-        elif health > 150 / 4:
+        elif self.hp > 150 / 4:
             return choicedict[random.choice(behaviordict["phase2"])]
         else:
             return choicedict[random.choice(behaviordict["phase3"])]
 
     def special_boss_behavior(
         self,
-        health,
         aggbehavior,
         defbehavior,
         passbehavior,
@@ -335,14 +340,14 @@ class Boss:
         if skill == True:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
-            return self.boss_behavior(health, defbehavior)
+            return self.boss_behavior(self.hp, defbehavior)
         elif player_history[-2:] == ["defend", "attack"] or player_history[-2:] == [
             "attack",
             "defend",
         ]:
-            return self.boss_behavior(health, aggbehavior)
+            return self.boss_behavior(self.hp, aggbehavior)
         else:
-            return self.boss_behavior(health, passbehavior)
+            return self.boss_behavior(self.hp, passbehavior)
 
 
 def main(mainstory, path1, path2, path3):
