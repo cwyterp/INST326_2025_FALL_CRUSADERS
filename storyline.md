@@ -15,9 +15,9 @@ A shield to defend with.
 A will to gather strength.
 And the power to unleash that gathered strength.
 Setting off on your journey you come across three paths.
-The first wide expanse of fields.
-The second is a docking shore.
-The third is a dense forest.
+A: A wide expanse of fields.
+B: A docking shore.
+C: A dense forest.
 Where will you go?
 
 After a long journey you are now faced with the Rat King's Castle. 

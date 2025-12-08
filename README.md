@@ -1,6 +1,5 @@
 # INST326_2025_FALL_CRUSADERS
 326 Final Project repository
-
 ## Purpose of Each File in the Program: 
 
 .gitignore: provide a list of files for git to ignore
@@ -33,20 +32,8 @@ Using the story files located in this directory, the script could also run with 
 
 > python rpg_game.py storyline.md storyA.md storyB.md storyC.md
 
-## Using our Program
-(may not be necessary if self-explanatory enough)
-
-## Attribution
-
-| Method/Function | Primary Author | Techniques Demonstrated |
-| ---- | ---- | ---- | 
-| storyline | Jahnavi | |
-| commence | Jahnavi | |
-| end_results | Jahnavi | |
-| run_game | Jahnavi | |
-| round | Breanna | f-strings containing expressions |
-| main | Breanna | |
-| take_action | Heyson | |
-| boss_behavior | Chris | | 
-| special_boss_behavior | Chris | |
-| parse_args | | ArgumentParser class |
+## Attribution:
+| Method/function | Primary Author | Techniques Demonstrated |
+| :-------: | :------: | :-------: |
+| Story.storyline  | Jahnavi Vemuri  | **with** statements  |
+| Game.  | Jahnavi Vemuri  |   |
