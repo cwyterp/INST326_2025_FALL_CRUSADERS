@@ -23,7 +23,7 @@ class Story:
 class Game:
     # Jahnavi's Section 2
     def __init__(self):
-        self.player = Player()
+        self.player = Player(input("Choose name: "),input("Choose your skill(Smite,Heal,Sheild): ") )
         self.boss = Boss()
 
         self.status = True
