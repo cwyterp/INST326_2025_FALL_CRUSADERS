@@ -13,7 +13,7 @@ class Story:
                 print(line)
                 if line[-1] == "?":
                     choice = input("Choose your destiny.")
-                    if choice not in Story.alphabet:
+                    if choice not in alphabet:
                         raise ValueError("Invalid choice. Enter a letter a-d")
                 else:
                     input("Press 'space' to continue...")
