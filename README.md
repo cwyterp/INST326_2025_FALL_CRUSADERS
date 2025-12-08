@@ -35,7 +35,8 @@ Using the story files located in this directory, the script could also run with 
 ## Attribution:
 | Method/function | Primary Author | Techniques Demonstrated |
 | :-------: | :------: | :-------: |
-| take_action | Heyson garcia | **min** & **max** statements |
+| Player.take_action | Heyson garcia | **min** & **max** statements |
+| Player.update_history | Heyson Garcia | conditional expression | 
 | Moveset.round | Breanna Doyle | f-strings with and expression |
 | Story.storyline  | Jahnavi Vemuri  | **with** statements  |
 | Game.  | Jahnavi Vemuri  |   |
