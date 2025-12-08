@@ -6,16 +6,34 @@ import sys
 class Story:
     # Jahnavi's Section: Story Function
     def storyline(main_story, path_A, path_B, path_C):
-        alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
+        alphabet = ["A", "B", "C", "a", "b", "c"]
         with open(main_story, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
                 print(line)
-                if line[-1] == "?":
-                    choice = input("Choose your destiny.")
-                    if choice not in alphabet:
-                        raise ValueError("Invalid choice. Enter a letter a-d")
-                else:
+                input("Press 'space' to continue...")
+        choice = input("Choose your destiny.")
+        if choice not in alphabet:
+            raise ValueError("Invalid choice. Enter a letter a-c")
+        if choice in ["A", "a"]:
+            with open(path_A, "r", encoding="UTF-8") as A:
+                for raw_line in A:
+                    line = raw_line.strip()
+                    print(line)
+                    input("Press 'space' to continue...")
+
+        if choice in ["B", "b"]:
+            with open(path_B, "r", encoding="UTF-8") as B:
+                for raw_line in B:
+                    line = raw_line.strip()
+                    print(line)
+                    input("Press 'space' to continue...")
+
+        if choice in ["C", "c"]:
+            with open(path_C, "r", encoding="UTF-8") as C:
+                for raw_line in C:
+                    line = raw_line.strip()
+                    print(line)
                     input("Press 'space' to continue...")
 
 
