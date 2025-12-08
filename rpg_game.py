@@ -137,7 +137,7 @@ class Moveset:
                     boss.aggbehavior,
                     boss.defbehavior,
                     boss.passbehavior,
-                    boss.player_history[-1],
+                    boss.player_history[-2:],
                 )
 
             # turn! update hp/charge status
