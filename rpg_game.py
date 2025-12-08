@@ -5,16 +5,15 @@ import sys
 
 class Story:
     # Jahnavi's Section: Story Function
-    alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
-
-    def storyline(filepath="storyline.md"):
-        with open(filepath, "r", encoding="UTF-8") as f:
+    def storyline(main_story, path_A, path_B, path_C):
+        alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
+        with open(main_story, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
                 print(line)
                 if line[-1] == "?":
                     choice = input("Choose your destiny.")
-                    if choice not in Story.alphabet:
+                    if choice not in alphabet:
                         raise ValueError("Invalid choice. Enter a letter a-d")
                 else:
                     input("Press 'space' to continue...")
@@ -138,7 +137,7 @@ class Moveset:
                     boss.aggbehavior,
                     boss.defbehavior,
                     boss.passbehavior,
-                    boss.player_history[-1],
+                    boss.player_history[-2:],
                 )
 
             # turn! update hp/charge status
