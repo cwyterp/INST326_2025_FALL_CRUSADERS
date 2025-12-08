@@ -86,8 +86,8 @@ class Game:
                     + f"\n{self.player_stats}\n{self.boss.hp}"
                 )
 
-    def run_game(self):
-        self.commence()
+    def run_game(self, boss):
+        self.commence(boss)
         self.end_results()
 
 
@@ -119,8 +119,9 @@ def round(player, boss_type):
             "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill\n"
         )
         # ask player what to do
-        action_choice = input(f"{player.name}, which action would you like to "
-                              "take?\n")
+        action_choice = input(
+            f"{player.name}, which action would you like to " "take?\n"
+        )
         # validate
         while True:
             if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
@@ -243,7 +244,7 @@ class Player:
                 self.charge = min(self.charge + 1, self.max_charge)
                 print(f"Skill not ready. {self.name} gains small charge ")
 
-        return 
+        return
 
 
 class Boss:
@@ -284,13 +285,13 @@ class Boss:
         Returns:
             Move choice based on the health and ratio or charged skill
         """
-        if self.type == "passive": 
+        if self.type == "passive":
             behaviordict = self.passbehavior
         elif self.type == "aggressive":
             behaviordict = self.aggbehavior
-        else: 
+        else:
             behaviordict = self.defbehavior
-            
+
         choicedict = {
             1: "attack",
             2: "defend",
@@ -392,8 +393,7 @@ def main(mainstory, path1, path2, path3):
 
     game = Game(name, skill)
 
-    game.commence(Boss(boss_types[choice]))
-    game.end_results()
+    game.run_game(Boss(boss_types[choice]))
 
 
 def parse_args(arglist):
