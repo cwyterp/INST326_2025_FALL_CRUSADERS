@@ -3,7 +3,6 @@ from argparse import ArgumentParser
 import sys
 
 
-
 # Jahnavi's Section: Story Function
 def storyline(main_story, path_A, path_B, path_C):
     alphabet = ["A", "B", "C", "a", "b", "c"]
@@ -16,12 +15,12 @@ def storyline(main_story, path_A, path_B, path_C):
             print()
     choice = input("Choose your destiny: ")
     # validate
-    while True: 
+    while True:
         if choice not in alphabet:
             choice = input("Invalid choice. Please choos a letter a-c: ")
-        else: 
+        else:
             break
-        
+
     if choice in ["A", "a"]:
         with open(path_A, "r", encoding="UTF-8") as A:
             for raw_line in A:
@@ -47,6 +46,7 @@ def storyline(main_story, path_A, path_B, path_C):
                 print()
     return choice
 
+
 class Game:
     # Jahnavi's Section 2
     def __init__(self, player_name, player_skill):
@@ -62,34 +62,28 @@ class Game:
             "charge": self.player.charge,
         }
 
-        self.boss_stats = {
-            "hp": self.boss.hp,
-            "attack": self.boss.attack,
-            "defense": self.boss.defense,
-            "charge": self.boss.charge,
-        }
-
     def commence(self, boss):
-
-        round(self.player, boss)
+        self.boss = boss
+        round(self.player, self.boss)
 
         self.player.hp = self.player_stats["hp"]
-        # boss.hp = boss_stats["hp"]
 
         self.winner = "boss" if self.player_stats["hp"] <= 0 else "player"
         self.status = False
 
-    def end_results(self):
+    def end_results(
+        self,
+    ):
         if self.status == False:
             if self.winner == "player":
                 return (
                     f"Yayy you defeated the boss. Good Job :). \nHere were "
-                    + f"the stats: \n{self.player_stats}\n{self.boss_stats}"
+                    + f"the stats: \n{self.player_stats}\n{self.boss.hp}"
                 )
             else:
                 return (
                     f"Womp womp you lost :( \n...\n Here were the stats: "
-                    + f"\n{self.player_stats}\n{self.boss_stats}"
+                    + f"\n{self.player_stats}\n{self.boss.hp}"
                 )
 
     def run_game(self):
@@ -98,6 +92,7 @@ class Game:
 
 
 # Breanna Doyle, movement/round
+
 
 def round(player, boss_type):
     """
@@ -112,9 +107,9 @@ def round(player, boss_type):
         Several print statements giving the player options, asking for
         input, and announcing if the player wins/loses.
     """
-    #make boss
+    # make boss
     boss = Boss(boss_type)
-    
+
     while player.hp > 0 and boss.hp > 0:
         # tell player health status of both
         print(f"You have {player.hp} hp. Your opponent has {boss.hp} hp.")
@@ -124,9 +119,7 @@ def round(player, boss_type):
             "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
         )
         # ask player what to do
-        action_choice = input(
-            f"{player.name}, which action would you like to take?"
-        )
+        action_choice = input(f"{player.name}, which action would you like to take?")
         # validate
         while True:
             if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
@@ -375,8 +368,7 @@ def main(mainstory, path1, path2, path3):
     while True:
         if skill not in ["smite", "shield", "heal"]:
             print(
-                "This is not a valid action. Please type one of the " 
-                "listed skills."
+                "This is not a valid action. Please type one of the " "listed skills."
             )
             print(
                 "You can choose from one of the following options:\n"
@@ -386,15 +378,18 @@ def main(mainstory, path1, path2, path3):
         else:
             break
     choice = storyline(mainstory, path1, path2, path3)
-    #deciding boss type
-    boss_types = { "A" or "a": "passive", "B" or "b": "defensive", "C" or "c": 
-        "aggressive"}
-    
+    # deciding boss type
+    boss_types = {
+        "A" or "a": "passive",
+        "B" or "b": "defensive",
+        "C" or "c": "aggressive",
+    }
+
     game = Game(name, skill)
-    
+
     game.commence(Boss(boss_types[choice]))
     game.end_results()
-    
+
 
 def parse_args(arglist):
     """Parse command-line arguments.
