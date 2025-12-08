@@ -7,7 +7,7 @@ class Story:
     # Jahnavi's Section: Story Function
     alphabet = ["A", "B", "C", "D", "a", "b", "c", "d"]
 
-    def storyline(filepath="storyline.md"):
+    def storyline(filepath="mainstory.txt"):
         with open(filepath, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
