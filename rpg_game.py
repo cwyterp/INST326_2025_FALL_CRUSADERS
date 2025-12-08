@@ -317,8 +317,32 @@ def main(path):
         readable story
 
     """
-    story = Story()
-    game = Game().run_game()
+    # story = Story()
+    # game = Game().run_game()
+
+    # get player inputs: name, skill
+    name = input("Hello Traveler! Please input your name here: ")
+    print()
+    print("To help you on your travels, you may choose one skill.")
+    print("These skills are:\nsmite, for extra attack damage\nshield, for a"
+          " stronger defense\nheal, to boost your health")
+    skill = input("Please type the name of the skill you'd like here: ")
+    
+    #validate skill type
+    while True:
+        if skill not in ["smite", "shield", "heal"]:
+            print(
+                "This is not a valid action. Please type one of the "
+                "listed skills."
+            )
+            print(
+                "You can choose from one of the following options:\n"
+                "smite\nshield\nheal"
+            )
+            skill = input("Please type the name of the skill you'd like here: ")
+        else:
+            break
+
 
 
 def parse_args(arglist):
