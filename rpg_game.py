@@ -22,10 +22,8 @@ class Story:
 
 class Game:
     # Jahnavi's Section 2
-    def __init__(self):
-        self.player = Player(
-            input("Choose name: "), input("Choose your skill(Smite,Heal,Sheild): ")
-        )
+    def __init__(self, player_name, player_skill):
+        self.player = Player(player_name, player_skill)
         self.boss = Boss()
 
         self.status = True
@@ -88,7 +86,7 @@ class Moveset:
             Several print statements giving the player options, asking for
             input, and announcing if the player wins/loses.
         """
-        
+
         while player.hp > 0 and boss.hp > 0:
             # tell player health status of both
             print(f"You have {player.hp} hp. Your opponent has {boss.hp} hp.")
@@ -159,11 +157,15 @@ class Moveset:
 class Player:
     # Heyson's Section: Player section
     def update_history(self, choice):
-        
-        action_list = {'A': 'attack', 'D': 'defend', 'C': 'charge', 'S': 'skill'}
-        
-        self.player_history.append(action_list[choice]) if choice in action_list else print("Invalid choice")
-        
+
+        action_list = {"A": "attack", "D": "defend", "C": "charge", "S": "skill"}
+
+        (
+            self.player_history.append(action_list[choice])
+            if choice in action_list
+            else print("Invalid choice")
+        )
+
     def __init__(self, name, skill_type):
 
         self.name = name
@@ -234,9 +236,9 @@ class Boss:
         self.charge = 1
         self.max_charge = 5
         self.aggbehavior = {
-        "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
-        "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
-        "phase3": [1, 1, 1, 1, 1, 3, 3, 3],
+            "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
+            "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
+            "phase3": [1, 1, 1, 1, 1, 3, 3, 3],
         }
         self.defbehavior = {
             "phase1": [1, 1, 1, 1, 2, 2, 2, 3],
@@ -267,7 +269,7 @@ class Boss:
             3: "charge",
             4: "skill",
         }
-        
+
         if skill:
             return choicedict[4]
         if health > 150 / 2:
@@ -278,7 +280,13 @@ class Boss:
             return choicedict[random.choice(behaviordict["phase3"])]
 
     def special_boss_behavior(
-        self, health, aggbehavior, defbehavior, passbehavior, player_history, skill=False
+        self,
+        health,
+        aggbehavior,
+        defbehavior,
+        passbehavior,
+        player_history,
+        skill=False,
     ):
         """Works as a special adaptable boss based on player choices
 
@@ -302,9 +310,10 @@ class Boss:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
             return self.boss_behavior(health, defbehavior)
-        elif player_history[-2:] == ["defend", "attack"] or player_history[
-            -2:
-        ] == ["attack", "defend"]:
+        elif player_history[-2:] == ["defend", "attack"] or player_history[-2:] == [
+            "attack",
+            "defend",
+        ]:
             return self.boss_behavior(health, aggbehavior)
         else:
             return self.boss_behavior(health, passbehavior)
