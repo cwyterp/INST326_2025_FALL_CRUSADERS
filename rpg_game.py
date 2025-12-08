@@ -23,7 +23,7 @@ class Story:
 class Game:
     # Jahnavi's Section 2
     def __init__(self):
-        self.player = Player()
+        self.player = Player(input("Choose name: "),input("Choose your skill(Smite,Heal,Sheild): ") )
         self.boss = Boss()
 
         self.status = True
@@ -155,21 +155,14 @@ class Moveset:
 
 class Player:
     # Heyson's Section: Player section
-    def __init__(
-        self,
-        name, 
-        skill_type,
-        hp = 100,
-        attack = 12, 
-        defense = 5, 
-        max_charge = 5 ,):
+    def __init__(self,name,skill_type):
         
         self.name = name
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
+        self.hp = 100
+        self.attack = 12
+        self.defense = 5
         self.charge = 0
-        self.max_charge = max_charge
+        self.max_charge = 5
         # heal, smite, shield
         self.skill_type = skill_type
         self.player_history = []
