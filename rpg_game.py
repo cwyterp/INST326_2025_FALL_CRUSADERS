@@ -3,47 +3,54 @@ from argparse import ArgumentParser
 import sys
 
 
-class Story:
-    # Jahnavi's Section: Story Function
-    def storyline(main_story, path_A, path_B, path_C):
-        alphabet = ["A", "B", "C", "a", "b", "c"]
-        basic_boss = None
-        with open(main_story, "r", encoding="UTF-8") as f:
-            for raw_line in f:
+
+# Jahnavi's Section: Story Function
+def storyline(main_story, path_A, path_B, path_C):
+    alphabet = ["A", "B", "C", "a", "b", "c"]
+    basic_boss = None
+    with open(main_story, "r", encoding="UTF-8") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            print(line)
+            input("Press 'enter' to continue...")
+            print()
+    choice = input("Choose your destiny: ")
+    # validate
+    while True: 
+        if choice not in alphabet:
+            choice = input("Invalid choice. Please choos a letter a-c: ")
+        else: 
+            break
+        
+    if choice in ["A", "a"]:
+        with open(path_A, "r", encoding="UTF-8") as A:
+            for raw_line in A:
                 line = raw_line.strip()
                 print(line)
-                input("Press 'space' to continue...")
-        choice = input("Choose your destiny.")
-        if choice not in alphabet:
-            raise ValueError("Invalid choice. Enter a letter a-c")
+                input("Press 'enter' to continue...")
+                print()
 
-        if choice in ["A", "a"]:
-            with open(path_A, "r", encoding="UTF-8") as A:
-                for raw_line in A:
-                    line = raw_line.strip()
-                    print(line)
-                    input("Press 'space' to continue...")
+    if choice in ["B", "b"]:
+        with open(path_B, "r", encoding="UTF-8") as B:
+            for raw_line in B:
+                line = raw_line.strip()
+                print(line)
+                input("Press 'enter' to continue...")
+                print()
 
-        if choice in ["B", "b"]:
-            with open(path_B, "r", encoding="UTF-8") as B:
-                for raw_line in B:
-                    line = raw_line.strip()
-                    print(line)
-                    input("Press 'space' to continue...")
-
-        if choice in ["C", "c"]:
-            with open(path_C, "r", encoding="UTF-8") as C:
-                for raw_line in C:
-                    line = raw_line.strip()
-                    print(line)
-                    input("Press 'space' to continue...")
-
+    if choice in ["C", "c"]:
+        with open(path_C, "r", encoding="UTF-8") as C:
+            for raw_line in C:
+                line = raw_line.strip()
+                print(line)
+                input("Press 'enter' to continue...")
+                print()
+    return choice
 
 class Game:
     # Jahnavi's Section 2
     def __init__(self, player_name, player_skill):
         self.player = Player(player_name, player_skill)
-        self.boss = Boss()
 
         self.status = True
         self.winner = None
@@ -62,12 +69,12 @@ class Game:
             "charge": self.boss.charge,
         }
 
-    def commence(self):
+    def commence(self, boss):
 
-        Moveset.round(self.player, self.boss)
+        round(self.player, boss)
 
         self.player.hp = self.player_stats["hp"]
-        self.boss.hp = self.boss_stats["hp"]
+        # boss.hp = boss_stats["hp"]
 
         self.winner = "boss" if self.player_stats["hp"] <= 0 else "player"
         self.status = False
@@ -91,86 +98,88 @@ class Game:
 
 
 # Breanna Doyle, movement/round
-class Moveset:
-    def round(player, boss):
-        """
-        Simulates a round/fight between a player and boss. Characters take turns
-        until one character has been defeated (their health reaches 0).
 
-        Args:
-            player (Player): The human player
-            boss (Boss): The boss (opponent) of the round
+def round(player, boss_type):
+    """
+    Simulates a round/fight between a player and boss. Characters take turns
+    until one character has been defeated (their health reaches 0).
 
-        Side effects:
-            Several print statements giving the player options, asking for
-            input, and announcing if the player wins/loses.
-        """
+    Args:
+        player (Player): The human player
+        boss (Boss): The boss (opponent) of the round
 
-        while player.hp > 0 and boss.hp > 0:
-            # tell player health status of both
-            print(f"You have {player.hp} hp. Your opponent has {boss.hp} hp.")
-            # give options
-            print(
-                "You can choose from one of the following options:\n\n"
-                "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
-            )
-            # ask player what to do
-            action_choice = input(
-                f"{player.name}, which action would you like to take?"
-            )
-            # validate
-            while True:
-                if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
-                    print(
-                        "This is not a valid action. Please type one of the"
-                        "specified letters."
-                    )
-                    print(
-                        "You can choose from one of the following options:\n\n"
-                        "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
-                    )
-                    action_choice = input(
-                        f"{player.name}, which action would you like" "to take?"
-                    )
-                else:
-                    action_dict = {
-                        "A": "attack",
-                        "a": "attack",
-                        "D": "defend",
-                        "d": "defend",
-                        "C": "charge",
-                        "c": "charge",
-                        "S": "skill",
-                        "s": "skill",
-                    }
-                    action = action_dict[action_choice]
-                    break
-            # update player history
-            player.player_history.append[action]
-
-            # choose boss action:
-            if boss["type"] == "aggressive" or "passive" or "defensive":
-                boss.boss_behavior(boss["hp"], boss["type"])
-            else:
-                boss.special_boss_behavior(
-                    boss["hp"],
-                    boss.aggbehavior,
-                    boss.defbehavior,
-                    boss.passbehavior,
-                    boss.player_history[-2:],
+    Side effects:
+        Several print statements giving the player options, asking for
+        input, and announcing if the player wins/loses.
+    """
+    #make boss
+    boss = Boss(boss_type)
+    
+    while player.hp > 0 and boss.hp > 0:
+        # tell player health status of both
+        print(f"You have {player.hp} hp. Your opponent has {boss.hp} hp.")
+        # give options
+        print(
+            "You can choose from one of the following options:\n\n"
+            "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
+        )
+        # ask player what to do
+        action_choice = input(
+            f"{player.name}, which action would you like to take?"
+        )
+        # validate
+        while True:
+            if action_choice not in ["A", "D", "C", "S", "a", "d", "c", "s"]:
+                print(
+                    "This is not a valid action. Please type one of the"
+                    "specified letters."
                 )
+                print(
+                    "You can choose from one of the following options:\n\n"
+                    "A: Attack \nD: Defend \nC: Charge a skill \nS: Use a Skill"
+                )
+                action_choice = input(
+                    f"{player.name}, which action would you like" "to take?"
+                )
+            else:
+                action_dict = {
+                    "A": "attack",
+                    "a": "attack",
+                    "D": "defend",
+                    "d": "defend",
+                    "C": "charge",
+                    "c": "charge",
+                    "S": "skill",
+                    "s": "skill",
+                }
+                action = action_dict[action_choice]
+                break
+        # update player history
+        player.player_history.append[action]
 
-            # turn! update hp/charge status
-            player.take_action(boss, action)
-            # will continue until one or both character's hp dip below zero
-
-        if player["hp"] <= 0:
-            print("Unfortunately, you have have been defeated.")
-        elif boss["hp"] <= 0:
-            print(
-                "Hooray! You have successfully defeated the boss and will move on"
-                " to the next round."
+        # choose boss action:
+        if boss["type"] == "aggressive" or "passive" or "defensive":
+            boss.boss_behavior(boss["hp"], boss["type"])
+        else:
+            boss.special_boss_behavior(
+                boss["hp"],
+                boss.aggbehavior,
+                boss.defbehavior,
+                boss.passbehavior,
+                boss.player_history[-2:],
             )
+
+        # turn! update hp/charge status
+        player.take_action(boss, action)
+        # will continue until one or both character's hp dip below zero
+
+    if player["hp"] <= 0:
+        print("Unfortunately, you have have been defeated.")
+    elif boss["hp"] <= 0:
+        print(
+            "Hooray! You have successfully defeated the boss and will move on"
+            " to the next round."
+        )
 
 
 class Player:
@@ -188,7 +197,7 @@ class Player:
     def __init__(self, name, skill_type):
 
         self.name = name
-        self.hp = 100
+        self.hp = 20
         self.attack = 12
         self.defense = 5
         self.charge = 0
@@ -248,8 +257,9 @@ class Player:
 class Boss:
     # Chris Section Boss Behavior
 
-    def __init__(self):
-        self.hp = 150
+    def __init__(self, type):
+        self.type = type
+        self.hp = 25
         self.defense = 6
         self.attack = 10
         self.charge = 1
@@ -342,7 +352,7 @@ class Boss:
             return self.boss_behavior(health, passbehavior)
 
 
-def main(path):
+def main(mainstory, path1, path2, path3):
     """Runs game based on the file given
 
     Args:
@@ -350,8 +360,6 @@ def main(path):
         readable story
 
     """
-    # story = Story()
-    # game = Game().run_game()
 
     # get player inputs: name, skill
     name = input("Hello Traveler! Please input your name here: ")
@@ -367,7 +375,8 @@ def main(path):
     while True:
         if skill not in ["smite", "shield", "heal"]:
             print(
-                "This is not a valid action. Please type one of the " "listed skills."
+                "This is not a valid action. Please type one of the " 
+                "listed skills."
             )
             print(
                 "You can choose from one of the following options:\n"
@@ -376,7 +385,16 @@ def main(path):
             skill = input("Please type the name of the skill you'd like here: ")
         else:
             break
-
+    choice = storyline(mainstory, path1, path2, path3)
+    #deciding boss type
+    boss_types = { "A" or "a": "passive", "B" or "b": "defensive", "C" or "c": 
+        "aggressive"}
+    
+    game = Game(name, skill)
+    
+    game.commence(Boss(boss_types[choice]))
+    game.end_results()
+    
 
 def parse_args(arglist):
     """Parse command-line arguments.
@@ -392,12 +410,12 @@ def parse_args(arglist):
     """
     parser = ArgumentParser()
     parser.add_argument("mainstory", help="file of storylines")
-    ##parser.add_argument("story1", help="story1file")
-    ##parser.add_argument("story2", help="story2file")
-    ##parser.add_argument("story3", help="story3file")
+    parser.add_argument("path1", help="story1file")
+    parser.add_argument("path2", help="story2file")
+    parser.add_argument("path3", help="story3file")
     return parser.parse_args(arglist)
 
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
-    main(args.file)
+    main(args.mainstory, args.path1, args.path2, args.path3)
