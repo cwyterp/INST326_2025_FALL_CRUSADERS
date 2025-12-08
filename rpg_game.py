@@ -292,7 +292,7 @@ class Boss:
             3: "charge",
             4: "skill",
         }
-        if skill == True:
+        if self.max_charge == True:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
             return self.boss_behavior(health, defbehavior)
