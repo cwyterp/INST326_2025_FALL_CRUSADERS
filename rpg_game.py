@@ -158,6 +158,12 @@ class Moveset:
 
 class Player:
     # Heyson's Section: Player section
+    def update_history(self, choice):
+        
+        action_list = {'A': 'attack', 'D': 'defend', 'C': 'charge', 'S': 'skill'}
+        
+        self.player_history.append(action_list[choice]) if choice in action_list else print("Invalid choice")
+        
     def __init__(self, name, skill_type):
 
         self.name = name
