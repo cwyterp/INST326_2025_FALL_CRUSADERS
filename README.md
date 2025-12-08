@@ -35,6 +35,8 @@ Using the story files located in this directory, the script could also run with 
 ## Attribution:
 | Method/function | Primary Author | Techniques Demonstrated |
 | :-------: | :------: | :-------: |
+|take_action | Heyson garcia | **min** & **max** statements |
+|
 | Story.storyline  | Jahnavi Vemuri  | **with** statements  |
 | Game.  | Jahnavi Vemuri  |   |
 | boss_behavior | Christopher Yeung | optional parameters |
