@@ -224,23 +224,7 @@ class Player:
 
 class Boss:
     # Chris Section Boss Behavior
-    aggbehavior = {
-        "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
-        "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
-        "phase3": [1, 1, 1, 1, 1, 3, 3, 3],
-    }
 
-    defbehavior = {
-        "phase1": [1, 1, 1, 1, 2, 2, 2, 3],
-        "phase2": [1, 1, 2, 2, 2, 2, 3, 3],
-        "phase3": [1, 2, 2, 2, 2, 3, 3, 3],
-    }
-
-    passbehavior = {
-        "phase1": [1, 1, 1, 2, 2, 3, 3, 3],
-        "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
-        "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
-    }
 
     def __init__(self):
         self.hp = 150
@@ -248,6 +232,22 @@ class Boss:
         self.attack = 10
         self.charge = 1
         self.max_charge = 5
+        self.aggbehavior = {
+        "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
+        "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
+        "phase3": [1, 1, 1, 1, 1, 3, 3, 3],
+        }
+        self.defbehavior = {
+        "phase1": [1, 1, 1, 1, 2, 2, 2, 3],
+        "phase2": [1, 1, 2, 2, 2, 2, 3, 3],
+        "phase3": [1, 2, 2, 2, 2, 3, 3, 3],
+        }
+
+        self.passbehavior = {
+        "phase1": [1, 1, 1, 2, 2, 3, 3, 3],
+        "phase2": [1, 1, 1, 2, 3, 3, 3, 3],
+        "phase3": [1, 1, 1, 3, 3, 3, 3, 3],
+        }
 
     def boss_behavior(health, behaviordict, skill=False):
         """Changes boss behavior based on health status, some always choices like using skill
@@ -261,24 +261,24 @@ class Boss:
         Returns:
             Move choice based on the health and ratio or charged skill
         """
-        move = Movement()
+        
         choicedict = {
-            1: move.attack(),
-            2: move.defend(),
-            3: move.charge(),
-            4: move.skill(),
+            1: "a",
+            2: "d",
+            3: "c",
+            4: "s",
         }
         if skill:
             return choicedict[4]
-        if health > behaviordict["health"] / 2:
+        if health > 150 / 2:
             return choicedict[random.choice(behaviordict["phase1"])]
-        elif health > behaviordict["health"] / 4:
+        elif health > 150 / 4:
             return choicedict[random.choice(behaviordict["phase2"])]
         else:
             return choicedict[random.choice(behaviordict["phase3"])]
 
     def special_boss_behavior(
-        self, health, aggbehavior, defbehavior, passbehavior, playerchoice, skill=False
+        self, health, aggbehavior, defbehavior, passbehavior, player_history, skill=False
     ):
         """Works as a special adaptable boss based on player choices
 
@@ -292,25 +292,20 @@ class Boss:
         Returns:
             Bosses move based on the behavior of the player character
         """
-        playerhistory = [
-            move.attack(),
-            move.attack(),
-        ]
-        playerhistory.append(playerchoice)
-        move = Movement()
+        
         choicedict = {
-            1: move.attack(),
-            2: move.defend(),
-            3: move.charge(),
-            4: move.skill(),
+            1: "a",
+            2: "d",
+            3: "c",
+            4: "s",
         }
         if skill == True:
             return choicedict[4]
-        if playerhistory[-2:] == [move.attack(), move.attack()]:
+        if player_history[-2:] == ["attack", "attack"]:
             return self.boss_behavior(health, defbehavior)
-        elif playerhistory[-2:] == [move.defend(), move.attack()] or playerhistory[
+        elif player_history[-2:] == ["defend", "attack"] or player_history[
             -2:
-        ] == [move.attack(), move.defend()]:
+        ] == ["attack", "defend"]:
             return self.boss_behavior(health, aggbehavior)
         else:
             return self.boss_behavior(health, passbehavior)
