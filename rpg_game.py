@@ -7,6 +7,7 @@ class Story:
     # Jahnavi's Section: Story Function
     def storyline(main_story, path_A, path_B, path_C):
         alphabet = ["A", "B", "C", "a", "b", "c"]
+        basic_boss = None
         with open(main_story, "r", encoding="UTF-8") as f:
             for raw_line in f:
                 line = raw_line.strip()
@@ -15,6 +16,7 @@ class Story:
         choice = input("Choose your destiny.")
         if choice not in alphabet:
             raise ValueError("Invalid choice. Enter a letter a-c")
+
         if choice in ["A", "a"]:
             with open(path_A, "r", encoding="UTF-8") as A:
                 for raw_line in A:
@@ -286,7 +288,7 @@ class Boss:
             3: "charge",
             4: "skill",
         }
-        
+
         if self.charge == 5:
             skill == True
         if skill:
