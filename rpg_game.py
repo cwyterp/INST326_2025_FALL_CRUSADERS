@@ -126,7 +126,7 @@ class Moveset:
                     action = action_dict[action_choice]
                     break
             # update player history
-            player.player_history.append["action"]
+            player.player_history.append[action]
 
             # choose boss action:
             if boss["type"] == "aggressive" or "passive" or "defensive":
@@ -149,7 +149,7 @@ class Moveset:
         elif boss["hp"] <= 0:
             print(
                 "Hooray! You have successfully defeated the boss and will move on"
-                "to the next round."
+                " to the next round."
             )
 
 
