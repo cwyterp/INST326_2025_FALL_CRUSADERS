@@ -56,33 +56,36 @@ class Game:
         self.winner = None
 
         self.player_stats = {
-            "Name": self.player.name,
-            "HP": self.player.hp,
-            "Attack": self.player.attack,
-            "Defense": self.player.defense,
-            "Charge": self.player.charge,
+            self.player.name,
+            self.player.hp,
+            self.player.attack,
+            self.player.defense,
+            self.player.charge,
         }
 
     def commence(self, boss):
         self.boss = boss
         round(self.player, self.boss)
 
-        self.player.hp = self.player_stats["HP"]
-
-        self.winner = "boss" if self.player_stats["HP"] <= 0 else "player"
+        self.winner = "boss" if self.player.hp <= 0 else "player"
         self.status = False
 
     def end_results(self):
+        p_name, p_health, p_attack, p_defense, p_charge = self.player_stats
         if self.status == False:
             if self.winner == "player":
                 return (
-                    f"Yayy you defeated the boss. Good Job :). \nHere were "
-                    + f"the stats: \n{self.player_stats}\n{self.boss.hp}"
+                    f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
+                    + f"the stats: \nYour Health{p_health}\nYour Attack: {p_attack}"
+                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
+                    + f"\nBoss Health:{self.boss.hp}"
                 )
             else:
                 return (
                     f"Womp womp you lost :( \n...\n Here were the stats: "
-                    + f"\n{self.player_stats}\n{self.boss.hp}"
+                    + f"\nYour Health{p_health}\nYour Attack: {p_attack}"
+                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
+                    + f"\nBoss Health:{self.boss.hp}"
                 )
 
     def run_game(self, boss):

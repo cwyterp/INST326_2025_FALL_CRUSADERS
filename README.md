@@ -35,10 +35,10 @@ Using the story files located in this directory, the script could also run with 
 ## Attribution:
 | Method/function | Primary Author | Techniques Demonstrated |
 | :-------: | :------: | :-------: |
-| Player.take_action | Heyson garcia | **min** & **max** statements |
-| Player.update_history | Heyson Garcia | conditional expression | 
-| Moveset.round | Breanna Doyle | f-strings with and expression |
-| Story.storyline  | Jahnavi Vemuri  | **with** statements  |
-| Game.  | Jahnavi Vemuri  |   |
-| boss_behavior | Christopher Yeung | optional parameters |
+| Player.take_action | Heyson garcia | **min** & **max** Statements |
+| Player.update_history | Heyson Garcia | Conditional Expression | 
+| round | Breanna Doyle | f-strings with and expression |
+| storyline  | Jahnavi Vemuri  | **with** Statements  |
+| Game.end_results  | Jahnavi Vemuri  | Sequence Unpacking  |
+| boss_behavior | Christopher Yeung | Optional Parameters |
 | parse_args | Christopher Yeung | Arguement Parser |
