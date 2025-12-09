@@ -13,11 +13,11 @@ def storyline(main_story, path_A, path_B, path_C):
             print(line)
             input("Press 'enter' to continue...")
             print()
-    choice = input("Choose your destiny: ")
+    choice = input("Choose your destiny: ").upper()
     # validate
     while True:
         if choice not in alphabet:
-            choice = input("Invalid choice. Please choos a letter a-c: ")
+            choice = input("Invalid choice. Please choose a letter a-c: ").upper()
         else:
             break
 
