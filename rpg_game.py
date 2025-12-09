@@ -6,7 +6,6 @@ import sys
 # Jahnavi's Section: Story Function
 def storyline(main_story, path_A, path_B, path_C):
     alphabet = ["A", "B", "C", "a", "b", "c"]
-    basic_boss = None
     with open(main_story, "r", encoding="UTF-8") as f:
         for raw_line in f:
             line = raw_line.strip()
@@ -17,7 +16,7 @@ def storyline(main_story, path_A, path_B, path_C):
     # validate
     while True:
         if choice not in alphabet:
-            choice = input("Invalid choice. Please choos a letter a-c: ")
+            choice = input("Invalid choice. Please choose a letter a-c: ")
         else:
             break
 
