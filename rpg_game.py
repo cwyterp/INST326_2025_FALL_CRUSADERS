@@ -47,32 +47,32 @@ def storyline(main_story, path_A, path_B, path_C):
 
 
 class Game:
+
     # Jahnavi's Section 2
     def __init__(self, player_name, player_skill):
         self.player = Player(player_name, player_skill)
 
         self.status = True
         self.winner = None
+
         self.player_stats = {
-            "name": self.player.name,
-            "hp": self.player.hp,
-            "attack": self.player.attack,
-            "defense": self.player.defense,
-            "charge": self.player.charge,
+            "Name": self.player.name,
+            "HP": self.player.hp,
+            "Attack": self.player.attack,
+            "Defense": self.player.defense,
+            "Charge": self.player.charge,
         }
 
     def commence(self, boss):
         self.boss = boss
         round(self.player, self.boss)
 
-        self.player.hp = self.player_stats["hp"]
+        self.player.hp = self.player_stats["HP"]
 
-        self.winner = "boss" if self.player_stats["hp"] <= 0 else "player"
+        self.winner = "boss" if self.player_stats["HP"] <= 0 else "player"
         self.status = False
 
-    def end_results(
-        self,
-    ):
+    def end_results(self):
         if self.status == False:
             if self.winner == "player":
                 return (
