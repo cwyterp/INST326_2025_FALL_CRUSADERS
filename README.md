@@ -26,7 +26,7 @@ storyline.md: provide an overall storyline
 
 The script takes four command-line arguments, each one is a path to a text file. This is how you'd run the script on a Windows machine:  
 
-> python rpg_._game.py mainstory story1 story2 story3
+> python rpg_game.py mainstory story1 story2 story3
 
 Using the story files located in this directory, the script could also run with the following: 
 
