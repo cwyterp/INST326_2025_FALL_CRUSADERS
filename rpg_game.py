@@ -1,49 +1,66 @@
 import random
 from argparse import ArgumentParser
 import sys
+import re
 
 
-# Jahnavi's Section: Story Function
-def storyline(main_story, path_A, path_B, path_C):
-    alphabet = ["A", "B", "C", "a", "b", "c"]
-    with open(main_story, "r", encoding="UTF-8") as f:
-        for raw_line in f:
-            line = raw_line.strip()
-            print(line)
-            input("Press 'enter' to continue...")
-            print()
-    choice = input("Choose your destiny: ").upper()
-    # validate
-    while True:
-        if choice not in alphabet:
-            choice = input("Invalid choice. Please choose a letter a-c: ").upper()
-        else:
-            break
+class Story:
+    # Jahnavi's Section: Story Function
+    def storyline(main_story, path_A, path_B, path_C, game):
+        alphabet = ["A", "B", "C", "a", "b", "c"]
+        boss_types = {
+            "A" or "a": "passive",
+            "B" or "b": "defensive",
+            "C" or "c": "aggressive",
+        }
 
-    if choice in ["A", "a"]:
-        with open(path_A, "r", encoding="UTF-8") as A:
-            for raw_line in A:
+        with open(main_story, "r", encoding="UTF-8") as f:
+            for raw_line in f:
                 line = raw_line.strip()
                 print(line)
                 input("Press 'enter' to continue...")
                 print()
+        choice = input("Choose your destiny: ").upper()
+        # validate
+        while True:
+            if choice not in alphabet:
+                choice = input("Invalid choice. Please choose a letter a-c: ").upper()
+            else:
+                break
 
-    if choice in ["B", "b"]:
-        with open(path_B, "r", encoding="UTF-8") as B:
-            for raw_line in B:
-                line = raw_line.strip()
-                print(line)
-                input("Press 'enter' to continue...")
-                print()
+        if choice in ["A", "a"]:
+            with open(path_A, "r", encoding="UTF-8") as A:
+                for raw_line in A:
+                    if re.search(r"^\s", raw_line):
+                        game.commence(Boss(boss_types[choice]))
+                    else:
+                        line = raw_line.strip()
+                        print(line)
+                        input("Press 'enter' to continue...")
+                        print()
 
-    if choice in ["C", "c"]:
-        with open(path_C, "r", encoding="UTF-8") as C:
-            for raw_line in C:
-                line = raw_line.strip()
-                print(line)
-                input("Press 'enter' to continue...")
-                print()
-    return choice
+        if choice in ["B", "b"]:
+            with open(path_B, "r", encoding="UTF-8") as B:
+                for raw_line in B:
+                    if re.search(r"^\s", raw_line):
+                        game.commence(Boss(boss_types[choice]))
+                    else:
+                        line = raw_line.strip()
+                        print(line)
+                        input("Press 'enter' to continue...")
+                        print()
+
+        if choice in ["C", "c"]:
+            with open(path_C, "r", encoding="UTF-8") as C:
+                for raw_line in C:
+                    if re.search(r"^\s", raw_line):
+                        game.commence(Boss(boss_types[choice]))
+                    else:
+                        line = raw_line.strip()
+                        print(line)
+                        input("Press 'enter' to continue...")
+                        print()
+        return choice
 
 
 class Game:
@@ -174,7 +191,7 @@ def round(player, boss_type):
     elif boss.hp <= 0:
         print(
             "Hooray! You have successfully defeated the boss and will move on"
-            " to the next round."
+            " to the next round.\n"
         )
 
 
@@ -383,9 +400,10 @@ def main(mainstory, path1, path2, path3):
                 "smite\nshield\nheal"
             )
             skill = input("Please type the name of the skill you'd like here: ")
+            print()
         else:
             break
-    choice = storyline(mainstory, path1, path2, path3)
+    # choice = Story.storyline(mainstory, path1, path2, path3)
     # deciding boss type
     boss_types = {
         "A" or "a": "passive",
@@ -395,7 +413,8 @@ def main(mainstory, path1, path2, path3):
 
     game = Game(name, skill)
 
-    game.run_game(Boss(boss_types[choice]))
+    Story.storyline(mainstory, path1, path2, path3, game)
+    # game.run_game(Boss(boss_types[choice]))
 
 
 def parse_args(arglist):
