@@ -5,7 +5,6 @@ import re
 
 
 class Story:
-    # Jahnavi's Section: Story Function
     def storyline(main_story, path_A, path_B, path_C, game):
         alphabet = ["A", "B", "C", "a", "b", "c"]
         boss_types = {
@@ -64,9 +63,33 @@ class Story:
 
 
 class Game:
+    """
+    In charge of initiating a battle between the player and a type of boss.
 
-    # Jahnavi's Section 2
+    Attributes:
+        player (Player): The player instanct that is participating in the
+            battles.
+        status (boolean): Indicates when the round or entire game has ended.
+        winner (str or None): Stores who won (either "boss" or "player") or None.
+        player_stats (set): A set containing the player's stats which includes...
+            player.name (str)
+            player.hp (int)
+            player.attack (int)
+            player.defense (int)
+            player.charge (int)
+    """
+
     def __init__(self, player_name, player_skill):
+        """
+        Initializes a Game object.
+
+        Args:
+            player_name (str): A string value that stores the name of the player.
+            player_skill (str): A string value that stores their specialty skill.
+
+        Side effects:
+            Initializes player_name and player_skill attributes.
+        """
         self.player = Player(player_name, player_skill)
 
         self.status = True
@@ -81,6 +104,21 @@ class Game:
         }
 
     def commence(self, boss):
+        """
+        Runs a full complete round between the player and the current boss. This
+        is done by calling the round() function which takes care of the back and
+        forth actions.
+
+        Args:
+            boss (Boss): An instance of a boss that the player will be fighting
+                against.
+
+        Side effects:
+            Modifies the player's and the boss's stats like health, attack, etc.
+            It also prints combat messages and determines the winner of the
+            round which gets sent to the winner attribute. The status of the
+            game will become false when the round ends.
+        """
         self.boss = boss
         round(self.player, self.boss)
 
@@ -88,6 +126,14 @@ class Game:
         self.status = False
 
     def end_results(self):
+        """
+        This provides a summary of the game for the user at the end of their
+        journey.
+
+        Returns:
+            str: A formatted summary which lets the player know who won and
+                the stats of the player and the boss at the end of the game.
+        """
         p_name, p_health, p_attack, p_defense, p_charge = self.player_stats
         if self.status == False:
             if self.winner == "player":
@@ -106,6 +152,19 @@ class Game:
                 )
 
     def run_game(self, boss):
+        """
+        Executes everything at once which should be used during the final boss
+        battle. This method will run a battle using the commence() method and
+        produce the end results by calling the end_results() method.
+
+        Args:
+            boss (Boss): An instance of a boss that the player will be fighting
+                against.
+
+        Side effects:
+            Performs a round between the player and the boss which prints the
+            combat messages in the round and generates a summary at the end.
+        """
         self.commence(boss)
         self.end_results()
 
