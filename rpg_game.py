@@ -302,7 +302,7 @@ class Player:
         self.name = name
         self.hp = 20
         self.attack = 12
-        self.defense = 5
+        self.defense = 0
         self.charge = 0
         self.max_charge = 5
         # heal, smite, shield
@@ -383,7 +383,7 @@ class Boss:
         """
         self.type = type
         self.hp = 25
-        self.defense = 6
+        self.defense = 0
         self.attack = 10
         self.charge = 1
         self.max_charge = 5
