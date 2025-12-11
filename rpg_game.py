@@ -374,6 +374,13 @@ class Boss:
     # Chris Section Boss Behavior
 
     def __init__(self, type):
+        """
+        Initializes the stats for the boss.
+        
+        Args:
+            type(str): type of boss that will be fighting
+
+        """
         self.type = type
         self.hp = 25
         self.defense = 6
@@ -402,7 +409,6 @@ class Boss:
 
         Args:
             health(int): current health of the boss
-            behaviordict(dictionary): inserts the specific behaviro ratios of a certain  boss
             skill(value): tells function if the skill charged enough to be used
 
         Returns:
@@ -448,10 +454,11 @@ class Boss:
             aggbehavior(dict): dictionary of aggressive boss behavior
             defbehavior(dict): dictionary of defensive boss behavior
             passbehavior(dict): dictionary of passive boss behavior
-            playerchoice(var): player's most recent choice
+            player_history(list): player's history of choices
+            skill(value): tells function if the skill charged enough to be used
 
         Returns:
-            Bosses move based on the behavior of the player character
+            Boss' move based on the behavior of the player character and behavior dictionary
         """
         choicedict = {
             1: "attack",
@@ -478,9 +485,14 @@ def main(mainstory, path1, path2, path3):
     """Runs game based on the file given
 
     Args:
-        path (str): path to a text file. File should be split accordingly to be a
+        mainstory(str): path to a text file. File should be split accordingly to be a
         readable story
+        path1(str): path to text file of story option 1
+        path2(str): path to text file of story option 2
+        path3(str): path to text file of story option 3
 
+    Side effects:
+        Prints and takes in the player name and type of skill. 
     """
 
     # get player inputs: name, skill
