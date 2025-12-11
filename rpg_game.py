@@ -255,9 +255,34 @@ def round(player, boss_type):
 
 
 class Player:
-    # Heyson's Section: Player section
-    def update_history(self, choice):
+    """
+    Represents the player character in the game.
 
+    Manages the player's stats, skill type, history of actions, and the logic
+    for executing actions against a Boss opponent.
+
+    Attributes:
+        name (str): The name of the player.
+        hp (int): Current health points.
+        attack (int): Base attack damage value.
+        defense (int): Base defense value.
+        charge (int): Current charge level for the special skill.
+        max_charge (int): The required charge level to use the skill.
+        skill_type (str): The type of special skill.
+        player_history (list): A history of actions taken by the player.
+    """
+    def update_history(self, choice):
+        """
+        Saves the player's action (A, D, C, S) in the player_history list.
+
+        Args:
+            choice (str): The input by the player
+                          
+        
+        Side effects:
+            Appends the corresponding action string ('attack', 'defend', etc.) 
+            to self.player_history. Prints an error if the choice is invalid.
+        """
         action_list = {"A": "attack", "D": "defend", "C": "charge", "S": "skill"}
 
         (
@@ -267,7 +292,13 @@ class Player:
         )
 
     def __init__(self, name, skill_type):
+        """
+        Initializes a new Player instance with base stats and a chosen skill.
 
+        Args:
+            name (str): The name of the player.
+            skill_type (str): The chosen skill.
+        """
         self.name = name
         self.hp = 20
         self.attack = 12
@@ -279,7 +310,21 @@ class Player:
         self.player_history = []
 
     def take_action(self, boss, action):
+        """
+        Executes the player's chosen action against the Boss opponent.
 
+        The action affects the player's stats or the boss's health (hp). 
+        Defense buffs are assumed to be temporary.
+
+        Args:
+            boss (Boss): The Boss object the player is currently fighting.
+            action (str): The action to perform.
+
+        Side effects:
+            Modifies self.hp, self.defense, self.charge, and 
+            boss.hp based on the action.
+            Prints a description of the action taken.
+        """
         if action == "attack":
             damage = max(0, self.attack - boss.defense)
             boss.hp -= damage
