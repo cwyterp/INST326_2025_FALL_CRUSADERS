@@ -389,13 +389,8 @@ class Boss:
 
         """
         self.type = type
-<<<<<<< HEAD
-        self.hp = 25
-        self.defense = 0
-=======
         self.hp = 20
         self.defense = 6
->>>>>>> 2aec36d1b7bd910eec721c76fdf644b35de624df
         self.attack = 10
         self.charge = 1
         self.max_charge = 5
