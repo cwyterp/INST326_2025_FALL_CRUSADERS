@@ -389,11 +389,11 @@ class Boss:
 
         """
         self.type = type
-        self.hp = 20
+        self.hp = 150
         self.defense = 6
         self.attack = 10
         self.charge = 1
-        self.max_charge = 5
+        self.max_charge = 7
         self.base_defense = 6
         self.aggbehavior = {
             "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
