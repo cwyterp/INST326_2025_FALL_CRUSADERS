@@ -5,7 +5,28 @@ import re
 
 
 class Story:
+    """
+    Reads story files and takes care of stories.
+    
+    """
     def storyline(main_story, path_A, path_B, path_C, game):
+        """
+        Reads the story lines and story path, and starts a fight with a Boss
+        as needed. 
+
+        Primary author: Jahnavi Vemuri
+        Technique: with statements
+        
+        Args:
+            main_story (str): text file of main story line
+            path_A (str): text file of story path A
+            path_B (str): text file of story path B
+            path_C (str): text file of story path C
+            game (Game): A
+
+        Side effects: 
+            Prints text files of main story line and paths. 
+        """
         alphabet = ["A", "B", "C", "a", "b", "c"]
         boss_types = {
             "A" or "a": "passive",
@@ -20,6 +41,7 @@ class Story:
                 input("Press 'enter' to continue...")
                 print()
         choice = input("Choose your destiny: ").upper()
+        
         # validate
         while True:
             if choice not in alphabet:
@@ -34,23 +56,37 @@ class Story:
         else:
             path_file = path_C
 
-        current_boss_type = boss_types[choice]
+        #current_boss_type = boss_types[choice]
         fights_completed = 0
 
         with open(path_file, "r", encoding="UTF-8") as path_handle:
             for raw_line in path_handle:
                 line_stripped = raw_line.strip()
+                
+                    
                 if line_stripped:
                     print(line_stripped)
                     input("Press 'enter' to continue...")
                     print()
-                    continue
 
+                    behavior = Story.define_boss_type(line_stripped)
+                    if behavior: 
+                        current_boss_type = behavior
+                        
+                    continue
+                    
                 if re.search(r"^\s", raw_line):
 
-                    fights_completed += 1
-                    boss = Boss(current_boss_type)
-                    game.commence(boss)
+                    if fights_completed < 4:      
+                        fights_completed += 1
+                        boss = Boss(current_boss_type)
+                        print(f"BOSS TYPE IS {current_boss_type}")
+                        game.commence(boss)
+
+                    else: 
+                        boss = Boss("special")
+                        game.commence(boss)
+
 
                     if game.winner == "player":
                         game.status = True
@@ -62,8 +98,30 @@ class Story:
             print("Congratulations! You have successfully completed your journey!")
             print(game.end_results())
 
-        return choice
 
+    def define_boss_type(line): 
+        """
+        Reads the story and returns boss type.
+
+        Primary author: Breanna Doyle
+        Technique: Regular expressions
+
+        Args:
+            line (str): a single line from the story
+
+        Returns:
+            str: boss type, either passive, defensive, aggressive, or special
+        """
+        if re.search(r"(^Peter)", line):
+            return "passive"  
+        elif re.search(r"(^Doug)", line): 
+            return "defensive"
+        elif re.search(r"(^Aiten)", line):
+            return "aggressive" 
+        elif re.search(r"(^Opening)", line):
+            return "special"
+        else: 
+            pass
 
 class Game:
     """
@@ -74,12 +132,7 @@ class Game:
             battles.
         status (boolean): Indicates when the round or entire game has ended.
         winner (str or None): Stores who won (either "boss" or "player") or None.
-        player_stats (set): A set containing the player's stats which includes...
-            player.name (str)
-            player.hp (int)
-            player.attack (int)
-            player.defense (int)
-            player.charge (int)
+
     """
 
     def __init__(self, player_name, player_skill):
@@ -114,8 +167,8 @@ class Game:
             round which gets sent to the winner attribute. The status of the
             game will become false when the round ends.
         """
-        self.boss = boss
-        round(self.player, self.boss)
+        # self.boss = boss
+        round(self.player, boss)
 
         self.winner = "boss" if self.player.hp <= 0 else "player"
         self.status = False
@@ -124,6 +177,9 @@ class Game:
         """
         This provides a summary of the game for the user at the end of their
         journey.
+
+        Primary author: Jahnavi Vemuri
+        Technique: sequence unpacking
 
         Returns:
             str: A formatted summary which lets the player know who won and
@@ -151,31 +207,15 @@ class Game:
                 + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
             )
 
-    def run_game(self, boss):
-        """
-        Executes everything at once which should be used during the final boss
-        battle. This method will run a battle using the commence() method and
-        produce the end results by calling the end_results() method.
-
-        Args:
-            boss (Boss): An instance of a boss that the player will be fighting
-                against.
-
-        Side effects:
-            Performs a round between the player and the boss which prints the
-            combat messages in the round and generates a summary at the end.
-        """
-        self.commence(boss)
-        self.end_results()
-
 
 # Breanna Doyle, movement/round
-
-
-def round(player, boss_type):
+def round(player, boss):
     """
     Simulates a round/fight between a player and boss. Characters take turns
     until one character has been defeated (their health reaches 0).
+
+    Primary Author: Breanna Doyle
+    Technique: f-strings with an expression 
 
     Args:
         player (Player): The human player
@@ -185,8 +225,6 @@ def round(player, boss_type):
         Several print statements giving the player options, asking for
         input, and announcing if the player wins/loses.
     """
-    # make boss
-    boss = Boss(boss_type)
 
     while player.hp > 0 and boss.hp > 0:
         # tell player health status of both
@@ -228,7 +266,8 @@ def round(player, boss_type):
                 action = action_dict[action_choice]
                 break
         # update player history
-        player.player_history.append(action)
+        player.update_history(action)
+        
 
         player.take_action(boss, action)
 
@@ -240,7 +279,7 @@ def round(player, boss_type):
                 boss.aggbehavior,
                 boss.defbehavior,
                 boss.passbehavior,
-                boss.player_history[-2:],
+                player.player_history,
             )
 
         boss.take_action(player, boss_action)
@@ -262,11 +301,12 @@ class Player:
         name (str): The name of the player.
         hp (int): Current health points.
         attack (int): Base attack damage value.
-        defense (int): Base defense value.
+        defense (int): Defense value.
         charge (int): Current charge level for the special skill.
         max_charge (int): The required charge level to use the skill.
         skill_type (str): The type of special skill.
         player_history (list): A history of actions taken by the player.
+        self.base_defense (int): Base defense value
     """
 
     def update_history(self, choice):
@@ -276,16 +316,26 @@ class Player:
         Args:
             choice (str): The input by the player
 
+        Primary author: Heyson Garcia
+        Technique: Conditional Expression
 
         Side effects:
             Appends the corresponding action string ('attack', 'defend', etc.)
             to self.player_history. Prints an error if the choice is invalid.
         """
-        action_list = {"A": "attack", "D": "defend", "C": "charge", "S": "skill"}
-
+        action_dict = {
+            "A": "attack",
+            "a": "attack",
+            "D": "defend",
+            "d": "defend",
+            "C": "charge",
+            "c": "charge",
+            "S": "skill",
+            "s": "skill",
+        }
         (
-            self.player_history.append(action_list[choice])
-            if choice in action_list
+            self.player_history.append(action_dict[choice])
+            if choice in action_dict
             else print("Invalid choice")
         )
 
@@ -314,6 +364,9 @@ class Player:
 
         The action affects the player's stats or the boss's health (hp).
         Defense buffs are assumed to be temporary.
+        
+        Primary author: Heyson Garcia
+        Technique: min and max statements
 
         Args:
             boss (Boss): The Boss object the player is currently fighting.
@@ -340,7 +393,7 @@ class Player:
 
         elif action == "charge":
             self.charge = min(self.charge + 2, self.max_charge)
-            print(f"{self.name} charged their power! Charge is now:{self.max_charge}")
+            print(f"{self.name} charged their power! Charge is now: {self.max_charge}")
 
         elif action == "skill":
             if self.charge == self.max_charge:
@@ -411,8 +464,10 @@ class Boss:
         """Changes boss behavior based on health status, some always choices like using skill
         if it's charged and set 3 phases of 50% health, 25% health, then below 25%
 
+        Primary author: Christopher Yeung
+        Technique: Optional Parameters
+
         Args:
-            health(int): current health of the boss
             skill(value): tells function if the skill charged enough to be used
 
         Returns:
@@ -424,6 +479,7 @@ class Boss:
             behaviordict = self.aggbehavior
         else:
             behaviordict = self.defbehavior
+            print("DEFAULT, DIDN'T WORK")
 
         choicedict = {
             1: "attack",
@@ -454,7 +510,6 @@ class Boss:
         """Works as a special adaptable boss based on player choices
 
         Args:
-            health(int): health of boss
             aggbehavior(dict): dictionary of aggressive boss behavior
             defbehavior(dict): dictionary of defensive boss behavior
             passbehavior(dict): dictionary of passive boss behavior
@@ -574,22 +629,19 @@ def main(mainstory, path1, path2, path3):
             break
     # choice = Story.storyline(mainstory, path1, path2, path3)
     # deciding boss type
-    boss_types = {
-        "A" or "a": "passive",
-        "B" or "b": "defensive",
-        "C" or "c": "aggressive",
-    }
 
     game = Game(name, skill)
 
     Story.storyline(mainstory, path1, path2, path3, game)
-    # game.run_game(Boss(boss_types[choice]))
 
 
 def parse_args(arglist):
     """Parse command-line arguments.
 
     Expects four mandatory command-line argument: a main story file and the three branch story files.
+
+    Primary author: Christopher Yeung
+    Technique: Argument Parser
 
     Args:
         arglist (list of str): a list of command-line arguments to parse.
