@@ -21,6 +21,8 @@ storyC.txt: a story file for a single path
 
 mainstory.txt: provide an overall storyline
 
+storyline.json: tried a json file, didn't like it, can't delete it
+
 ## How to Run Our Program
 
 The script takes four command-line arguments, each one is a path to a text file. This is how you'd run the script on a Windows machine:  
