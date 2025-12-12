@@ -467,6 +467,7 @@ class Boss:
 
         Returns:
             Boss' move based on the behavior of the player character and behavior dictionary
+
         """
         choicedict = {
             1: "attack",
@@ -489,12 +490,28 @@ class Boss:
             return choicedict[random.choice(passbehavior["phase1"])]
 
     def use_skill(self, player):
+        """
+        Uses skill for the boss
+        
+        Args:
+            player(object): player object with attribute stats
+            
+        Side effects:
+            changes boss stats and prints boss move
+        """
         damage = max(0, (self.attack + 15) - player.defense)
         player.hp -= damage
         self.charge = 0
         print(f"Boss uses special attack dealing {damage} damage to {player.name}!")
 
     def take_action(self, player, action):
+        """
+        Docstring for take_action
+        
+        Args:
+            player(object): player object with attribute stats
+            action(str): move that will be happening
+        """
         # Reset boss defense to base if it was buffed in the last turn
         if self.defense != self.base_defense and action != "defend":
             self.defense = self.base_defense
