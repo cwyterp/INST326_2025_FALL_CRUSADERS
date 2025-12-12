@@ -27,38 +27,41 @@ class Story:
             else:
                 break
 
-        if choice in ["A", "a"]:
-            with open(path_A, "r", encoding="UTF-8") as A:
-                for raw_line in A:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
-                    else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
+        if choice == "A":
+            path_file = path_A
+        elif choice == "B":
+            path_file = path_B
+        else:
+            path_file = path_C
 
-        if choice in ["B", "b"]:
-            with open(path_B, "r", encoding="UTF-8") as B:
-                for raw_line in B:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
-                    else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
+        current_boss_type = boss_types[choice]
+        fights_completed = 0
 
-        if choice in ["C", "c"]:
-            with open(path_C, "r", encoding="UTF-8") as C:
-                for raw_line in C:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
+        with open(path_file, "r", encoding="UTF-8") as path_handle:
+            for raw_line in path_handle:
+                line_stripped = raw_line.strip()
+                if line_stripped:
+                    print(line_stripped)
+                    input("Press 'enter' to continue...")
+                    print()
+                    continue
+
+                if re.search(r"^\s", raw_line):
+
+                    fights_completed += 1
+                    boss = Boss(current_boss_type)
+                    game.commence(boss)
+
+                    if game.winner == "player":
+                        game.status = True
                     else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
+                        print(game.end_results())
+                        return choice
+
+        if fights_completed > 0 and game.winner == "player":
+            print("Congratulations! You have successfully completed your journey!")
+            print(game.end_results())
+
         return choice
 
 
@@ -95,14 +98,6 @@ class Game:
         self.status = True
         self.winner = None
 
-        self.player_stats = {
-            self.player.name,
-            self.player.hp,
-            self.player.attack,
-            self.player.defense,
-            self.player.charge,
-        }
-
     def commence(self, boss):
         """
         Runs a full complete round between the player and the current boss. This
@@ -134,22 +129,31 @@ class Game:
             str: A formatted summary which lets the player know who won and
                 the stats of the player and the boss at the end of the game.
         """
-        p_name, p_health, p_attack, p_defense, p_charge = self.player_stats
-        if self.status == False:
-            if self.winner == "player":
-                return (
-                    f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
-                    + f"the stats: \nYour Health{p_health}\nYour Attack: {p_attack}"
-                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
-                    + f"\nBoss Health:{self.boss.hp}"
-                )
-            else:
-                return (
-                    f"Womp womp you lost :( \n...\n Here were the stats: "
-                    + f"\nYour Health{p_health}\nYour Attack: {p_attack}"
-                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
-                    + f"\nBoss Health:{self.boss.hp}"
-                )
+        player_stats = (
+            self.player.name,
+            self.player.hp,
+            self.player.attack,
+            self.player.defense,
+            self.player.charge,
+        )
+        p_name, p_health, p_attack, p_defense, p_charge = player_stats
+
+        final_b_health = self.boss.hp
+
+        if self.winner == "player":
+            return (
+                f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
+                + f"the stats: \nYour Health: {p_health}\nYour Attack: {p_attack}"
+                + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
+                + f"\nBoss Health: {final_b_health}"
+            )
+        elif self.winner == "boss":
+            return (
+                f"Womp womp you lost :( \n...\n Here were the stats: "
+                + f"\nYour Health: {p_health}\nYour Attack: {p_attack}"
+                + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
+                + f"\nBoss Health: {final_b_health}"
+            )
 
     def run_game(self, boss):
         """
@@ -230,28 +234,25 @@ def round(player, boss_type):
         # update player history
         player.player_history.append(action)
 
+        player.take_action(boss, action)
+
         # choose boss action:
         if boss.type == "aggressive" or "passive" or "defensive":
-            boss.boss_behavior()
+            boss_action = boss.boss_behavior()
         else:
-            boss.special_boss_behavior(
+            boss_action = boss.special_boss_behavior(
                 boss.aggbehavior,
                 boss.defbehavior,
                 boss.passbehavior,
                 boss.player_history[-2:],
             )
 
-        # turn! update hp/charge status
-        player.take_action(boss, action)
-        # will continue until one or both character's hp dip below zero
+        boss.take_action(player, boss_action)
 
     if player.hp <= 0:
         print("Unfortunately, you have have been defeated.")
     elif boss.hp <= 0:
-        print(
-            "Hooray! You have successfully defeated the boss and will move on"
-            " to the next round.\n"
-        )
+        print("Hooray! Opponent defeated!!\n")
 
 
 class Player:
@@ -271,16 +272,17 @@ class Player:
         skill_type (str): The type of special skill.
         player_history (list): A history of actions taken by the player.
     """
+
     def update_history(self, choice):
         """
         Saves the player's action (A, D, C, S) in the player_history list.
 
         Args:
             choice (str): The input by the player
-                          
-        
+
+
         Side effects:
-            Appends the corresponding action string ('attack', 'defend', etc.) 
+            Appends the corresponding action string ('attack', 'defend', etc.)
             to self.player_history. Prints an error if the choice is invalid.
         """
         action_list = {"A": "attack", "D": "defend", "C": "charge", "S": "skill"}
@@ -300,7 +302,7 @@ class Player:
             skill_type (str): The chosen skill.
         """
         self.name = name
-        self.hp = 20
+        self.hp = 100
         self.attack = 12
         self.defense = 0
         self.charge = 0
@@ -308,12 +310,13 @@ class Player:
         # heal, smite, shield
         self.skill_type = skill_type
         self.player_history = []
+        self.base_defense = 5
 
     def take_action(self, boss, action):
         """
         Executes the player's chosen action against the Boss opponent.
 
-        The action affects the player's stats or the boss's health (hp). 
+        The action affects the player's stats or the boss's health (hp).
         Defense buffs are assumed to be temporary.
 
         Args:
@@ -321,10 +324,14 @@ class Player:
             action (str): The action to perform.
 
         Side effects:
-            Modifies self.hp, self.defense, self.charge, and 
+            Modifies self.hp, self.defense, self.charge, and
             boss.hp based on the action.
             Prints a description of the action taken.
         """
+        # Reset defense to base if it was buffed in the last turn
+        if self.defense != self.base_defense and action != "defend":
+            self.defense = self.base_defense
+
         if action == "attack":
             damage = max(0, self.attack - boss.defense)
             boss.hp -= damage
@@ -376,17 +383,23 @@ class Boss:
     def __init__(self, type):
         """
         Initializes the stats for the boss.
-        
+
         Args:
             type(str): type of boss that will be fighting
 
         """
         self.type = type
+<<<<<<< HEAD
         self.hp = 25
         self.defense = 0
+=======
+        self.hp = 20
+        self.defense = 6
+>>>>>>> 2aec36d1b7bd910eec721c76fdf644b35de624df
         self.attack = 10
         self.charge = 1
         self.max_charge = 5
+        self.base_defense = 6
         self.aggbehavior = {
             "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
             "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
@@ -429,7 +442,7 @@ class Boss:
         }
 
         if self.charge == 5:
-            skill == True
+            skill = True
         if skill:
             return choicedict[4]
         if self.hp > 150 / 2:
@@ -467,18 +480,50 @@ class Boss:
             4: "skill",
         }
         if self.charge == 5:
-            skill == True
+            skill = True
         if skill == True:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
-            return self.boss_behavior(self.hp, defbehavior)
+            return choicedict[random.choice(defbehavior["phase1"])]
         elif player_history[-2:] == ["defend", "attack"] or player_history[-2:] == [
             "attack",
             "defend",
         ]:
-            return self.boss_behavior(self.hp, aggbehavior)
+            return choicedict[random.choice(aggbehavior["phase1"])]
         else:
-            return self.boss_behavior(self.hp, passbehavior)
+            return choicedict[random.choice(passbehavior["phase1"])]
+
+    def use_skill(self, player):
+        damage = max(0, (self.attack + 15) - player.defense)
+        player.hp -= damage
+        self.charge = 0
+        print(f"Boss uses special attack dealing {damage} damage to {player.name}!")
+
+    def take_action(self, player, action):
+        # Reset boss defense to base if it was buffed in the last turn
+        if self.defense != self.base_defense and action != "defend":
+            self.defense = self.base_defense
+        # This prevents player defense from stacking infinitely.
+        if player.defense != player.base_defense:
+            player.defense = player.base_defense
+
+        if action == "attack":
+            damage = max(0, self.attack - player.defense)
+            player.hp -= damage
+            self.charge = min(self.charge + 1, self.max_charge)
+            print(f"Boss attacked dealing {damage} damage to {player.name}.")
+
+        elif action == "defend":
+            self.defense += 3
+            print(f"Boss raised its guard! Defense is now {self.defense}.")
+
+        elif action == "charge":
+            self.charge = min(self.charge + 2, self.max_charge)
+            print(f"Boss charged its power! Charge is now:{self.charge}")
+
+        elif action == "skill":
+            self.use_skill(player)
+            self.charge = 0
 
 
 def main(mainstory, path1, path2, path3):
@@ -492,7 +537,7 @@ def main(mainstory, path1, path2, path3):
         path3(str): path to text file of story option 3
 
     Side effects:
-        Prints and takes in the player name and type of skill. 
+        Prints and takes in the player name and type of skill.
     """
 
     # get player inputs: name, skill
@@ -500,8 +545,8 @@ def main(mainstory, path1, path2, path3):
     print()
     print("To help you on your travels, you may choose one skill.")
     print(
-        "These skills are:\nsmite, for extra attack damage\nshield, for a"
-        " stronger defense\nheal, to boost your health"
+        "These skills are:\nSmite: Extra attack damage\nShield: A"
+        " stronger defense\nHeal: Boost your health"
     )
     skill = input("Please type the name of the skill you'd like here: ")
 
