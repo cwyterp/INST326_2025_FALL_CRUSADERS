@@ -138,21 +138,17 @@ class Game:
         )
         p_name, p_health, p_attack, p_defense, p_charge = player_stats
 
-        final_b_health = self.boss.hp
-
         if self.winner == "player":
             return (
                 f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
                 + f"the stats: \nYour Health: {p_health}\nYour Attack: {p_attack}"
                 + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
-                + f"\nBoss Health: {final_b_health}"
             )
         elif self.winner == "boss":
             return (
                 f"Womp womp you lost :( \n...\n Here were the stats: "
                 + f"\nYour Health: {p_health}\nYour Attack: {p_attack}"
                 + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
-                + f"\nBoss Health: {final_b_health}"
             )
 
     def run_game(self, boss):
@@ -389,7 +385,7 @@ class Boss:
 
         """
         self.type = type
-        self.hp = 150
+        self.hp = 100
         self.defense = 6
         self.attack = 10
         self.charge = 1
