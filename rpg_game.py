@@ -27,38 +27,41 @@ class Story:
             else:
                 break
 
-        if choice in ["A", "a"]:
-            with open(path_A, "r", encoding="UTF-8") as A:
-                for raw_line in A:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
-                    else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
+        if choice == "A":
+            path_file = path_A
+        elif choice == "B":
+            path_file = path_B
+        else: 
+            path_file = path_C
+            
+        current_boss_type = boss_types[choice]
+        fights_completed = 0
 
-        if choice in ["B", "b"]:
-            with open(path_B, "r", encoding="UTF-8") as B:
-                for raw_line in B:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
+        with open(path_file, "r", encoding="UTF-8") as path_handle:
+            for raw_line in path_handle:  
+                line_stripped = raw_line.strip()
+                if line_stripped:
+                    print(line_stripped)
+                    input("Press 'enter' to continue...")
+                    print()
+                    continue 
+    
+                if re.search(r"^\s", raw_line): 
+                    
+                    fights_completed += 1
+                    boss = Boss(current_boss_type)
+                    game.commence(boss)
+                    
+                    if game.winner == "player":
+                        game.status = True
                     else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
-
-        if choice in ["C", "c"]:
-            with open(path_C, "r", encoding="UTF-8") as C:
-                for raw_line in C:
-                    if re.search(r"^\s", raw_line):
-                        game.commence(Boss(boss_types[choice]))
-                    else:
-                        line = raw_line.strip()
-                        print(line)
-                        input("Press 'enter' to continue...")
-                        print()
+                        print(game.end_results())
+                        return choice 
+                        
+        if fights_completed > 0 and game.winner == "player":
+            print("Congratulations! You have successfully completed your journey!")
+            print(game.end_results()) 
+            
         return choice
 
 
@@ -95,13 +98,13 @@ class Game:
         self.status = True
         self.winner = None
 
-        self.player_stats = {
+        self.player_stats = (
             self.player.name,
             self.player.hp,
             self.player.attack,
             self.player.defense,
             self.player.charge,
-        }
+        )
 
     def commence(self, boss):
         """
@@ -135,21 +138,24 @@ class Game:
                 the stats of the player and the boss at the end of the game.
         """
         p_name, p_health, p_attack, p_defense, p_charge = self.player_stats
-        if self.status == False:
-            if self.winner == "player":
-                return (
-                    f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
-                    + f"the stats: \nYour Health{p_health}\nYour Attack: {p_attack}"
-                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
-                    + f"\nBoss Health:{self.boss.hp}"
-                )
-            else:
-                return (
-                    f"Womp womp you lost :( \n...\n Here were the stats: "
-                    + f"\nYour Health{p_health}\nYour Attack: {p_attack}"
-                    + f"\nYour Defense{p_defense}\nYour Charge: {p_charge}"
-                    + f"\nBoss Health:{self.boss.hp}"
-                )
+        final_p_health = self.player.hp
+        final_b_health = self.boss.hp
+
+        if self.winner == "player":
+            return (
+                f"Yayy {p_name}! You defeated the boss. Good Job :). \nHere were "
+                + f"the stats: \nYour Health: {p_health}\nYour Attack: {p_attack}"
+                + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
+                + f"\nBoss Health: {self.boss.hp}"
+            )
+        elif self.winner == "boss":
+            return (
+                f"Womp womp you lost :( \n...\n Here were the stats: "
+                + f"\nYour Health: {p_health}\nYour Attack: {p_attack}"
+                + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
+                + f"\nBoss Health: {self.boss.hp}"
+            )
+        return 
 
     def run_game(self, boss):
         """
@@ -250,8 +256,7 @@ def round(player, boss_type):
         print("Unfortunately, you have have been defeated.")
     elif boss.hp <= 0:
         print(
-            "Hooray! You have successfully defeated the boss and will move on"
-            " to the next round.\n"
+            "Hooray! Opponent defeated!!\n"
         )
 
 
@@ -388,7 +393,7 @@ class Boss:
 
         """
         self.type = type
-        self.hp = 150
+        self.hp = 20
         self.defense = 6
         self.attack = 10
         self.charge = 1
@@ -539,8 +544,8 @@ def main(mainstory, path1, path2, path3):
     print()
     print("To help you on your travels, you may choose one skill.")
     print(
-        "These skills are:\nsmite, for extra attack damage\nshield, for a"
-        " stronger defense\nheal, to boost your health"
+        "These skills are:\nSmite: Extra attack damage\nShield: A"
+        " stronger defense\nHeal: Boost your health"
     )
     skill = input("Please type the name of the skill you'd like here: ")
 
