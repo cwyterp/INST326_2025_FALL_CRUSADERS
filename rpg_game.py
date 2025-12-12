@@ -229,21 +229,22 @@ def round(player, boss_type):
                 break
         # update player history
         player.player_history.append(action)
+        
+        player.take_action(boss, action)
 
         # choose boss action:
         if boss.type == "aggressive" or "passive" or "defensive":
-            boss.boss_behavior()
+            boss_action = boss.boss_behavior()
         else:
-            boss.special_boss_behavior(
+            boss_action = boss.special_boss_behavior(
                 boss.aggbehavior,
                 boss.defbehavior,
                 boss.passbehavior,
                 boss.player_history[-2:],
             )
 
-        # turn! update hp/charge status
-        player.take_action(boss, action)
-        # will continue until one or both character's hp dip below zero
+        boss.take_action(player, boss_action)
+  
 
     if player.hp <= 0:
         print("Unfortunately, you have have been defeated.")
@@ -300,7 +301,7 @@ class Player:
             skill_type (str): The chosen skill.
         """
         self.name = name
-        self.hp = 20
+        self.hp = 100
         self.attack = 12
         self.defense = 5
         self.charge = 0
@@ -308,6 +309,7 @@ class Player:
         # heal, smite, shield
         self.skill_type = skill_type
         self.player_history = []
+        self.base_defense = 5
 
     def take_action(self, boss, action):
         """
@@ -325,6 +327,10 @@ class Player:
             boss.hp based on the action.
             Prints a description of the action taken.
         """
+        # Reset defense to base if it was buffed in the last turn
+        if self.defense != self.base_defense and action != "defend":
+            self.defense = self.base_defense
+            
         if action == "attack":
             damage = max(0, self.attack - boss.defense)
             boss.hp -= damage
@@ -382,11 +388,12 @@ class Boss:
 
         """
         self.type = type
-        self.hp = 25
+        self.hp = 150
         self.defense = 6
         self.attack = 10
         self.charge = 1
         self.max_charge = 5
+        self.base_defense = 6
         self.aggbehavior = {
             "phase1": [1, 1, 1, 1, 1, 2, 2, 3],
             "phase2": [1, 1, 1, 1, 1, 2, 3, 3],
@@ -429,7 +436,7 @@ class Boss:
         }
 
         if self.charge == 5:
-            skill == True
+            skill = True
         if skill:
             return choicedict[4]
         if self.hp > 150 / 2:
@@ -467,18 +474,50 @@ class Boss:
             4: "skill",
         }
         if self.charge == 5:
-            skill == True
+            skill = True
         if skill == True:
             return choicedict[4]
         if player_history[-2:] == ["attack", "attack"]:
-            return self.boss_behavior(self.hp, defbehavior)
+            return choicedict[random.choice(defbehavior["phase1"])]
         elif player_history[-2:] == ["defend", "attack"] or player_history[-2:] == [
             "attack",
             "defend",
         ]:
-            return self.boss_behavior(self.hp, aggbehavior)
+            return choicedict[random.choice(aggbehavior["phase1"])]
         else:
-            return self.boss_behavior(self.hp, passbehavior)
+            return choicedict[random.choice(passbehavior["phase1"])]
+    
+    def use_skill(self, player):
+        damage = max(0, (self.attack + 15) - player.defense)
+        player.hp -= damage
+        self.charge = 0
+        print(f"Boss uses special attack dealing {damage} damage to {player.name}!")
+
+    def take_action(self, player, action):
+        # Reset boss defense to base if it was buffed in the last turn
+        if self.defense != self.base_defense and action != "defend":
+            self.defense = self.base_defense     
+        # This prevents player defense from stacking infinitely.
+        if player.defense != player.base_defense:
+            player.defense = player.base_defense
+
+        if action == "attack":
+            damage = max(0, self.attack - player.defense)
+            player.hp -= damage
+            self.charge = min(self.charge + 1, self.max_charge)
+            print(f"Boss attacked dealing {damage} damage to {player.name}.")
+
+        elif action == "defend":
+            self.defense += 3
+            print(f"Boss raised its guard! Defense is now {self.defense}.")
+
+        elif action == "charge":
+            self.charge = min(self.charge + 2, self.max_charge)
+            print(f"Boss charged its power! Charge is now:{self.charge}")
+
+        elif action == "skill":
+            self.use_skill(player)
+            self.charge = 0
 
 
 def main(mainstory, path1, path2, path3):
