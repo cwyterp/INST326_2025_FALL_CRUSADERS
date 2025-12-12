@@ -138,6 +138,7 @@ class Game:
                 the stats of the player and the boss at the end of the game.
         """
         p_name, p_health, p_attack, p_defense, p_charge = self.player_stats
+        
         final_p_health = self.player.hp
         final_b_health = self.boss.hp
 
@@ -155,7 +156,6 @@ class Game:
                 + f"\nYour Defense: {p_defense}\nYour Charge: {p_charge}"
                 + f"\nBoss Health: {self.boss.hp}"
             )
-        return 
 
     def run_game(self, boss):
         """
